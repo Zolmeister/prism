@@ -76,18 +76,18 @@ Events.on('challengeFriend', function() {
 })
 
 // keybindings
-Hammer($grid).on("swipeleft", function(e) {
+Hammer(window).on("swipeleft", function(e) {
 	e.preventDefault()
-  GAME.board.move('left')
+	GAME.board.move('left')
 }).on("swiperight", function(e) {
 	e.preventDefault()
-  GAME.board.move('right')
+	GAME.board.move('right')
 }).on("swipeup", function(e) {
 	e.preventDefault()
-  GAME.board.move('up')
+	GAME.board.move('up')
 }).on("swipedown", function(e) {
 	e.preventDefault()
-  GAME.board.move('down')
+	GAME.board.move('down')
 });
 
 Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
