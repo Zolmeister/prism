@@ -45,12 +45,27 @@ Events.on('setColor', function(elem) {
 })
 
 Events.on('gameOver', function() {
-	var infoScreen = document.getElementById( 'info-screen' )
+	var infoScreen = document.getElementById('info-screen')
 	infoScreen.className = 'show'
-	var gameOverBox = document.getElementById( 'game-over-box' )
-	var html = '<button>Challenge a Friend</button>'
-	html += ''
-	gameOverBox.innerHTML = html
+	var gameOverBox = document.getElementById('game-over-box')
+	var challengeButton = document.createElement('button')
+	challengeButton.innerText = 'Challenge a Friend'
+	// Should add some sort of fastclick here... (touch first)
+	challengeButton.addEventListener('click', function() {
+		Events.emit('challengeFriend')
+	})
+	gameOverBox.appendChild(challengeButton)
+})
+
+Events.on('challengeFriend', function() {
+	var score = 0;
+	Clay.Social.smartShare({
+		message: 'Think you can beat my score?'
+		title: 'I just scored ' + score + ' in Prism!', 
+		//image: screenshotURL,
+		data: {},
+		//respond: // the username of our opponent // cards.kik.returnToConversation
+	})
 })
 
 // keybindings

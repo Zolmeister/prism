@@ -11,7 +11,9 @@
 
 		<link rel="apple-touch-icon" href="/images/kik-icon" />
 		<link rel="kik-icon" href="/images/kik-icon.png" />
-		
+		<link rel="canonical" href="http://prism.clay.io/">
+		<link rel="terms" href="http://clay.io/tos">
+		<link rel="privacy" href="http://clay.io/privacy">
 		
 		<style type='text/css'>
 		html, body {
@@ -94,9 +96,9 @@
 			-webkit-text-fill-color: transparent;	
 		}
 		
-		button, select, .button {
+		button {
 			font-family: verdana;
-			font-size: 2em;
+			font-size: 1.5em;
 			padding: 10px;
 			-webkit-border-radius: 0;
 			border-radius: 0;
@@ -110,6 +112,7 @@
 			color: white;
 			cursor: pointer;
 			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+			pointer-events: auto;
 		}
 		button:active {
 			background: rgba(0, 0, 0, 0.1);
@@ -331,15 +334,6 @@
 			clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js"; 
 			var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
 		} )();
-		
-		window.challenge = function() {
-			Clay.Social.smartShare( { 
-				message: 'I just scored ' + 0 + ' in Prism!', 
-				//image: screenshotURL,
-				data: {},
-				//respond: // the username of our opponent // cards.kik.returnToConversation
-			} );
-		}
 		</script>
 	</head>
 
