@@ -55,13 +55,17 @@ Events.on('gameOver', function() {
 
 // keybindings
 Hammer($grid).on("swipeleft", function(e) {
-    GAME.board.move('left')
+	e.preventDefault()
+  GAME.board.move('left')
 }).on("swiperight", function(e) {
-    GAME.board.move('right')
+	e.preventDefault()
+  GAME.board.move('right')
 }).on("swipeup", function(e) {
-    GAME.board.move('up')
+	e.preventDefault()
+  GAME.board.move('up')
 }).on("swipedown", function(e) {
-    GAME.board.move('down')
+	e.preventDefault()
+  GAME.board.move('down')
 });
 
 Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
