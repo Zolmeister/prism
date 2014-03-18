@@ -37,7 +37,7 @@ function Board(grid) {
 	
 	this.endGame = function() {
 		// show end game screen
-		alert('game over')
+		Events.emit('gameOver')
 	}
 	
 	this.move = function(dir) {
@@ -87,10 +87,10 @@ function Board(grid) {
 						row += diff[0]
 						col += diff[1]
 						grid[row][col] = combine
-						Events.emit('setColor', {row:row, col: col, color: combine});
+						
 					}
-					
 					Events.emit('move', {fromRow: fromRow, toRow: row, fromCol: fromCol, toCol: col});
+					Events.emit('setColor', {row:row, col: col, color: Math.floor(combine)});
 				}
 			}
 		}
