@@ -1,4 +1,6 @@
 function Board(grid) {
+	var Events = typeof window !== 'undefined' ? window.Events : {emit:function(){}};
+
 	this.grid = grid || _.map(Array(4), function() {
 		return _.map(Array(4), function() {
 			return 0
@@ -22,12 +24,15 @@ function Board(grid) {
 		}
 		
 		var target = _.sample(emptyCells)
+		var row = target[0]
+		var col = target[1]
 		
 		// fill with either the first or second colors
 		var color = 1 //Math.random() > .9 ? 2 : 1;
-		this.grid[target[0]][target[1]] = color
+		this.grid[row][col] = color
 		
 		// add element to DOM
+		Events.emit('spawn', {row: row, col: col, color: color})
 	}
 	
 	this.endGame = function() {
@@ -65,6 +70,10 @@ function Board(grid) {
 			for(var c=0;c<cols.length;c++) {
 				var row = rows[r]
 				var col = cols[c]
+				
+				var fromRow = row
+				var fromCol = col
+				
 				if (grid[row] && grid[row][col]) {
 					while (grid[row + diff[0]] && (grid[row + diff[0]][col + diff[1]] === 0 ||
 								grid[row][col] === grid[row + diff[0]][col + diff[1]])) {
@@ -78,7 +87,10 @@ function Board(grid) {
 						row += diff[0]
 						col += diff[1]
 						grid[row][col] = combine
+						Events.emit('setColor', {row:row, col: col, color: combine});
 					}
+					
+					Events.emit('move', {fromRow: fromRow, toRow: row, fromCol: fromCol, toCol: col});
 				}
 			}
 		}
