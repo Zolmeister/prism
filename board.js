@@ -27,8 +27,7 @@ function Board(grid) {
 		var row = target[0]
 		var col = target[1]
 		
-		// fill with either the first or second colors
-		var color = 1 //Math.random() > .9 ? 2 : 1;
+		var color = 1
 		this.grid[row][col] = color
 		
 		// add element to DOM
@@ -75,10 +74,12 @@ function Board(grid) {
 				var fromCol = col
 				
 				if (grid[row] && grid[row][col]) {
+					var combine = grid[row][col]
+					
 					while (grid[row + diff[0]] && (grid[row + diff[0]][col + diff[1]] === 0 ||
 								grid[row][col] === grid[row + diff[0]][col + diff[1]])) {
 						
-						var combine = grid[row][col]
+						combine = grid[row][col]
 						if (grid[row][col] === grid[row + diff[0]][col + diff[1]]) {
 							combine = grid[row][col] + 1.1
 						}

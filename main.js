@@ -29,6 +29,7 @@ Events.on('spawn', function(spawn) {
 
 Events.on('setColor', function(elem) {
 	console.log('setColor', elem)
+	console.log('COLOR', elem.color)
 	var $tiles = $('.tile-'+elem.row+'-'+elem.col)
 	try {
 		_.map($tiles, function($tile) {
