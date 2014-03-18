@@ -1,0 +1,17 @@
+{
+  "name": "prism",
+  "version": "0.0.0",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Zolmeister/prism.git"
+  },
+  "devDependencies": {
+    "lodash": "~2.4.1"
+  }
+}
