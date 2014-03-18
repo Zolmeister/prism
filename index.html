@@ -32,6 +32,7 @@
 			right: 0;
 			background: rgba(255, 255, 255, 0.7);
 			transition: width 0.5s;
+			-webkit-transition: width 0.5s;
 		}
 		.progress-1 {
 			width: 87.5% !important;
@@ -73,10 +74,12 @@
 			animation: showTitle 2s;
 			opacity: 0;
 			-webkit-transition: opacity: 0.5s;
+			transition: opacity: 0.5s;
 		}
 		.show { /* for when we show the game over screen */
 			opacity: 1 !important;
 			-webkit-transition: opacity: 0.5s;
+			transition: opacity: 0.5s;
 		}
 		.info {
 			display: table-cell;
@@ -161,6 +164,7 @@
 		}
 		.tile {
 			transition: all 0.2s;
+			-webkit-transition: all 0.2s;
 			position: absolute;
 			width: 25%;
 			height: 25%;
@@ -168,6 +172,7 @@
 		}
 		.tile div {
 			transition: background-color 1s;
+			-webkit-transition: background-color 1s;
 			position: relative;
 			width: 100%;
 			height: 100%;
