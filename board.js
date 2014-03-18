@@ -7,6 +7,28 @@ function Board(grid) {
 		})
 	})
 	
+	this.hasAnotherMove = function() {
+		for(var r=0;r<this.grid.length;r++) {
+			for(var c=0;c<this.grid[0].length;c++) {
+				if (!this.grid[r][c]) {
+					return true
+				}
+				var dirs = [
+					[-1, 0],
+					[1, 0],
+					[0, -1],
+					[0, 1]
+				]
+				var self = this
+				if (_.some(dirs, function(dir) {
+					return self.grid[r+dir[0]] &&
+						self.grid[r][c] === self.grid[r+dir[0]][c+dir[1]]
+				})) return true
+			}
+		}
+		return false
+	}
+	
 	this.spawn = function() {
 		
 		// get random empty grid cell
@@ -19,7 +41,7 @@ function Board(grid) {
 			}
 		}
 		
-		if(emptyCells.length === 0) {
+		if(!this.hasAnotherMove()) {
 			return this.endGame()
 		}
 		

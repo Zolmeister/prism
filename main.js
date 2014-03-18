@@ -35,12 +35,19 @@ Events.on('spawn', function(spawn) {
 	$grid.appendChild($tile)
 })
 
+var maxColor = 1
 Events.on('setColor', function(elem) {
 	var $tiles = $('.tile-'+elem.row+'-'+elem.col)
 	try {
 		_.map($tiles, function($tile) {
 			$tile.className = $tile.className.replace(/tile-phase-\d/, 'tile-phase-'+(elem.color-1))
 		})
+
+		if (elem.color > maxColor) {
+			maxColor = elem.color
+			$progress = $('#progress-cover')[0]
+			$progress.className = $progress.className.replace(/progress-\d/, 'progress-'+(maxColor-1))
+		}
 	} catch (e) {}
 })
 
