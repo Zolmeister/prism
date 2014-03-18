@@ -119,6 +119,16 @@
 			pointer-events: none; 
 		}
 		
+		.grid-outer {
+			width: 100%;
+			height: 100%;
+			display: table;
+		}
+		.grid-inner {
+			display: table-cell;
+			vertical-align: middle;
+		}
+		
 		.grid-background, .grid {
 			width: 100%;
 			height: 100%;
@@ -336,32 +346,36 @@
 			</div>
 		</div>
 		
-		<div class='grid-background'>
-			<div class='grid-row'>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-			</div>
-			<div class='grid-row'>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-			</div>
-			<div class='grid-row'>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-			</div>
-			<div class='grid-row'>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-				<div class='grid-cell'></div>
-			</div>
-			<div class='grid'>
+		<div class='grid-outer'>
+			<div class='grid-inner'>
+				<div class='grid-background'>
+					<div class='grid-row'>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+					</div>
+					<div class='grid-row'>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+					</div>
+					<div class='grid-row'>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+					</div>
+					<div class='grid-row'>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+						<div class='grid-cell'></div>
+					</div>
+					<div class='grid'>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div id='progress-cover'></div>
