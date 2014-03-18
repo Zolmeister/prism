@@ -8,7 +8,6 @@ var GAME = {
 
 var $grid = $('.grid')[0]
 Events.on('move', function(move) {
-	console.log('move', move)
 	if (move.fromRow === move.toRow && move.fromCol === move.toCol) return;
 	var $tiles = $('.tile-'+move.fromRow+'-'+move.fromCol)
 	var $old = $('.tile-'+move.toRow+'-'+move.toCol)[0]
@@ -29,7 +28,6 @@ Events.on('move', function(move) {
 })
 
 Events.on('spawn', function(spawn) {
-	console.log('spawn', spawn)
 	var $div = document.createElement('div')
 	var $tile = document.createElement('div')
 	$tile.setAttribute('class', 'tile '+'tile-'+spawn.row+'-'+spawn.col+' tile-phase-'+(spawn.color-1))
@@ -38,7 +36,6 @@ Events.on('spawn', function(spawn) {
 })
 
 Events.on('setColor', function(elem) {
-	console.log('setColor', elem)
 	var $tiles = $('.tile-'+elem.row+'-'+elem.col)
 	try {
 		_.map($tiles, function($tile) {
@@ -74,3 +71,17 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 // init
 GAME.board.spawn()
 GAME.board.spawn()
+
+function sizing() {
+	var gridWidth = $grid.offsetWidth
+	var gridHeight = $grid.offsetHeight
+	var boxSize = Math.min(gridWidth, gridHeight) + 'px'
+	$grid.style.width = boxSize
+	$grid.style.height = boxSize
+	$('.grid-background')[0].style.width = boxSize
+	$('.grid-background')[0].style.height = boxSize
+}
+sizing()
+$grid.style.visibility = 'visible'
+$('.grid-background')[0].style.visibility = 'visible'
+window.onresize = sizing
