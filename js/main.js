@@ -76,7 +76,7 @@ Events.on('challengeFriend', function() {
 })
 
 // keybindings
-Hammer(window).on("swipeleft", function(e) {
+Hammer($grid).on("swipeleft", function(e) {
 	e.preventDefault()
 	GAME.board.move('left')
 }).on("swiperight", function(e) {
@@ -101,11 +101,9 @@ GAME.board.spawn()
 function sizing() {
 	var gridWidth = $grid.offsetWidth
 	var gridHeight = $grid.offsetHeight
-	var boxSize = Math.min(gridWidth, gridHeight) + 'px'
-	$grid.style.width = boxSize
-	$grid.style.height = boxSize
-	$('.grid-background')[0].style.width = boxSize
-	$('.grid-background')[0].style.height = boxSize
+	var boxSize = Math.min(gridWidth, gridHeight)
+	$('.grid-background')[0].style.width = boxSize + 'px'
+	$('.grid-background')[0].style.height = (boxSize - 14) + 'px' // 7px  padding
 }
 sizing()
 $grid.style.visibility = 'visible'
