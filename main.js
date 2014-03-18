@@ -65,7 +65,7 @@ Events.on('gameOver', function() {
 })
 
 Events.on('challengeFriend', function() {
-	var score = 0;
+	var score = GAME.board.score;
 	Clay.Social.smartShare({
 		message: 'Think you can beat my score?',
 		title: 'I just scored ' + score + ' in Prism!', 
