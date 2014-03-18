@@ -7,6 +7,9 @@ function Board(grid) {
 		})
 	})
 	
+	this.score = 0
+	this.isGameOver = false
+	
 	this.hasAnotherMove = function() {
 		for(var r=0;r<this.grid.length;r++) {
 			for(var c=0;c<this.grid[0].length;c++) {
@@ -41,8 +44,12 @@ function Board(grid) {
 			}
 		}
 		
-		if(!this.hasAnotherMove()) {
+		if (!this.hasAnotherMove()) {
 			return this.endGame()
+		}
+		
+		if (!emptyCells.length) {
+			return;
 		}
 		
 		var target = _.sample(emptyCells)
@@ -59,10 +66,12 @@ function Board(grid) {
 	
 	this.endGame = function() {
 		// show end game screen
+		this.isGameOver = true
 		Events.emit('gameOver')
 	}
 	
 	this.move = function(dir) {
+		if (this.isGameOver) return;
 		this._move(dir)
 		this.spawn()
 	}
@@ -104,7 +113,8 @@ function Board(grid) {
 						
 						combine = grid[row][col]
 						if (grid[row][col] === grid[row + diff[0]][col + diff[1]]) {
-							combine = grid[row][col] + 1.1
+							combine = grid[row][col] + 1 + Math.random() / 2
+							this.score += Math.pow(grid[row][col], 2)
 						}
 							
 						grid[row][col] = 0

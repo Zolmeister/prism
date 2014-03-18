@@ -65,7 +65,7 @@ Events.on('gameOver', function() {
 })
 
 Events.on('challengeFriend', function() {
-	var score = 0;
+	var score = GAME.board.score;
 	Clay.Social.smartShare({
 		message: 'Think you can beat my score?',
 		title: 'I just scored ' + score + ' in Prism!', 
@@ -76,19 +76,26 @@ Events.on('challengeFriend', function() {
 })
 
 // keybindings
-Hammer($grid).on("swipeleft", function(e) {
+var move='left';
+Hammer(window).on("dragleft", function(e) {
 	e.preventDefault()
-	GAME.board.move('left')
-}).on("swiperight", function(e) {
+	e.gesture.preventDefault()
+	move='left'
+}).on("dragright", function(e) {
 	e.preventDefault()
-	GAME.board.move('right')
-}).on("swipeup", function(e) {
+	e.gesture.preventDefault()
+	move='right'
+}).on("dragup", function(e) {
 	e.preventDefault()
-	GAME.board.move('up')
-}).on("swipedown", function(e) {
+	e.gesture.preventDefault()
+	move='up'
+}).on("dragdown", function(e) {
 	e.preventDefault()
-	GAME.board.move('down')
-});
+	e.gesture.preventDefault()
+	move='down'
+}).on('dragend', function(e) {
+	GAME.board.move(move)
+})
 
 Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 	GAME.board.move(e.keyIdentifier.toLowerCase())
