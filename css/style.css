@@ -186,51 +186,61 @@ button:active {
 }
 .tile-phase-0 div {
 	background: #ddd;
+	z-index: 1;
 }
 .tile-phase-1 div {
 	background: #78c5d5;
 	-webkit-animation: mergeAnimation1 0.5s;
 	animation: mergeAnimation1 0.5s;
+	z-index: 2;
 }
 .tile-phase-2 div {
 	background: #459ba8;
 	-webkit-animation: mergeAnimation2 0.5s;
 	animation: mergeAnimation2 0.5s;
+	z-index: 3;
 }
 .tile-phase-3 div {
 	background: #79c268;
 	-webkit-animation: mergeAnimation3 0.5s;
 	animation: mergeAnimation3 0.5s;
+	z-index: 4;
 }
 .tile-phase-4 div {
 	background: #c5d747;
 	-webkit-animation: mergeAnimation4 0.5s;
 	animation: mergeAnimation4 0.5s;
+	z-index: 5;
 }
 .tile-phase-5 div {
 	background: #f5d63d;
 	-webkit-animation: mergeAnimation5 0.5s;
 	animation: mergeAnimation5 0.5s;
+	z-index: 6;
 }
 .tile-phase-6 div {
 	background: #f18c32;
 	-webkit-animation: mergeAnimation6 0.5s;
 	animation: mergeAnimation6 0.5s;
+	z-index: 7;
 }
 .tile-phase-7 div {
 	background: #e868a1;
 	-webkit-animation: mergeAnimation7 0.5s;
 	animation: mergeAnimation7 0.5s;
+	z-index: 8;
 }
 .tile-phase-8 div {
 	background: #bf63a6;
 	-webkit-animation: mergeAnimation8 0.5s;
 	animation: mergeAnimation28 0.5s;
+	z-index: 9;
 }
 .tile-phase-9 div {
 	background: -webkit-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
 	-webkit-animation: mergeAnimation9 0.5s;
 	animation: mergeAnimation9 0.5s;
+	z-index: 10;
 }
 .tile-0-0 {
 	top: 0;
@@ -364,7 +374,7 @@ button:active {
 @-webkit-keyframes spawnTile
 {
 	0%	 { -webkit-transform: scale(0.8); }
-	100%	 { -webkit-transform: scale(0.95); }
+	100%	 { -webkit-transform: scale(1); }
 }
 
 @-webkit-keyframes showTitle
