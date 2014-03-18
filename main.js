@@ -10,12 +10,22 @@ var $grid = $('.grid')[0]
 Events.on('move', function(move) {
 	console.log('move', move)
 	if (move.fromRow === move.toRow && move.fromCol === move.toCol) return;
-	var $tile = $('.tile-'+move.fromRow+'-'+move.fromCol)[0]
+	var $tiles = $('.tile-'+move.fromRow+'-'+move.fromCol)
 	var $old = $('.tile-'+move.toRow+'-'+move.toCol)[0]
+	_.map($tiles, function($tile) {
+		$tile.className = $tile.className.replace(/tile-\d-\d/, 'tile-'+move.toRow+'-'+move.toCol)
+	})
+	
 	if ($old) {
-		$old.parentElement.removeChild($old)
+		setTimeout(function() {
+			_.map($tiles, function($tile) {
+				try {
+					$tile.parentElement.removeChild($tile)
+				} catch(e) {
+				}
+			})
+		}, 1000)
 	}
-	$tile.className = $tile.className.replace(/tile-\d-\d/, 'tile-'+move.toRow+'-'+move.toCol)
 })
 
 Events.on('spawn', function(spawn) {
