@@ -75,19 +75,12 @@ function Board(grid) {
 				var fromCol = col
 				
 				if (grid[row] && grid[row][col]) {
-<<<<<<< HEAD
-					while (grid[row + diff[0]] && (grid[row + diff[0]][col + diff[1]] === 0 ||
-								grid[row][col] === grid[row + diff[0]][col + diff[1]])) {
-						
-						var combine = grid[row][col]
-=======
 					var combine = grid[row][col]
 					
 					while (grid[row + diff[0]] && (grid[row + diff[0]][col + diff[1]] === 0 ||
 								grid[row][col] === grid[row + diff[0]][col + diff[1]])) {
 						
 						combine = grid[row][col]
->>>>>>> js
 						if (grid[row][col] === grid[row + diff[0]][col + diff[1]]) {
 							combine = grid[row][col] + 1.1
 						}
