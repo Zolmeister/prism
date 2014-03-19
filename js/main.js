@@ -126,7 +126,7 @@ GAME.board.spawn()
 var spawnPos = GAME.board.spawn() // store the spawn position for the tutorial. [row, col]
 
 // Run the tutorial for first-time visitors
-if(true || !localStorage['tutorial-shown']) {
+if(!localStorage['tutorial-shown']) {
 	GAME.tutorial = new Tutorial(spawnPos)
 	localStorage['tutorial-shown'] = 1
 }
