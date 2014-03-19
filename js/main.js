@@ -55,13 +55,25 @@ Events.on('gameOver', function() {
 	var infoScreen = document.getElementById('info-screen')
 	infoScreen.className = 'show'
 	var gameOverBox = document.getElementById('game-over-box')
+	gameOverBox.style.display = 'block'
+	
 	var challengeButton = document.createElement('button')
 	challengeButton.innerText = 'Challenge a Friend'
 	// Should add some sort of fastclick here... (touch first)
 	challengeButton.addEventListener('click', function() {
 		Events.emit('challengeFriend')
 	})
+	
+	var gameOverButton = document.createElement('button')
+	gameOverButton.innerText = 'Play Again'
+	gameOverButton.className = 'play-again'
+	// Should add some sort of fastclick here... (touch first)
+	gameOverButton.addEventListener('click', function() {
+		Events.emit('restartGame')
+	})
+	
 	gameOverBox.appendChild(challengeButton)
+	gameOverBox.appendChild(gameOverButton)
 })
 
 Events.on('challengeFriend', function() {
@@ -75,8 +87,16 @@ Events.on('challengeFriend', function() {
 	})
 })
 
+Events.on('restartGame', function() {
+	GAME.board.resetGrid()
+	GAME.board.score = 0
+	$('.grid')[0].innerHTML = ''
+	document.getElementById('progress-cover').className = 'progress-0'
+	document.getElementById('info-screen').style.display = 'none'
+})
+
 // keybindings
-var move='left';
+var move = 'left';
 Hammer(window).on("dragleft", function(e) {
 	e.preventDefault()
 	e.gesture.preventDefault()
@@ -103,7 +123,13 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 
 // init
 GAME.board.spawn()
-GAME.board.spawn()
+var spawnPos = GAME.board.spawn() // store the spawn position for the tutorial. [row, col]
+
+// Run the tutorial for first-time visitors
+if(true || !localStorage['tutorial-shown']) {
+	GAME.tutorial = new Tutorial(spawnPos)
+	localStorage['tutorial-shown'] = 1
+}
 
 function sizing() {
 	var gridWidth = $grid.offsetWidth

@@ -1,14 +1,21 @@
 function Board(grid) {
 	var Events = typeof window !== 'undefined' ? window.Events : {emit:function(){}};
-
-	this.grid = grid || _.map(Array(4), function() {
-		return _.map(Array(4), function() {
-			return 0
-		})
-	})
 	
 	this.score = 0
 	this.isGameOver = false
+	
+	this.resetGrid = function() {
+		this.grid = _.map(Array(4), function() {
+			return _.map(Array(4), function() {
+				return 0
+			})
+		})
+	}
+	
+	if(grid)
+		this.grid = grid
+	else
+		this.resetGrid()
 	
 	this.hasAnotherMove = function() {
 		for(var r=0;r<this.grid.length;r++) {
@@ -56,12 +63,14 @@ function Board(grid) {
 		var row = target[0]
 		var col = target[1]
 		
-		// fill with either the first or second colors
-		var color = 1
+		// fill with either the first or second colors. 90% first color, 10% second
+		var color = Math.random() < 0.1 ? 2 : 1
 		this.grid[row][col] = color
 		
 		// add element to DOM
 		Events.emit('spawn', {row: row, col: col, color: color})
+		
+		return [row, col] // used for tutorial
 	}
 	
 	this.endGame = function() {
@@ -72,6 +81,8 @@ function Board(grid) {
 	
 	this.move = function(dir) {
 		if (this.isGameOver) return;
+		if (GAME.tutorial)
+			GAME.tutorial.nextStep()
 		this._move(dir)
 		this.spawn()
 	}
