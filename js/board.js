@@ -18,11 +18,20 @@ function Board(grid) {
 	else
 		this.resetGrid()
 	
-	this.newGame = function() {
+	this.newGame = function(startingPositions) {
 		this.resetGrid()
-		this.spawn()
-		this.spawn()
+		if (startingPositions) {
+			var self = this
+			_.forEach(startingPositions, function(pos){
+				self.spawn(pos[0], pos[1])
+			})
+		} else {
+			this.spawn()
+			this.spawn()
+		}
+		
 		this.score = 0
+		Events.emit('score', this.score)
 		this.isGameOver = false
 	}
 	
@@ -68,7 +77,25 @@ function Board(grid) {
 		return _.sample(result)
 	}
 	
-	this.spawn = function() {
+	this.spawn = function(row, col) {
+		if(!row && !col) {
+			var pos = this.randomSpawn()
+			row = pos[0]
+			col = pos[1]
+		}
+		
+		// fill with either the first or second colors. 90% first color, 10% second
+		var color = Math.random() < 0.1 ? 2 : 1
+		this.lastVisited.push([row, col])
+		this.grid[row][col] = color
+		
+		// add element to DOM
+		Events.emit('spawn', {row: row, col: col, color: color})
+		
+		return [row, col] // used for tutorial
+	}
+	
+	this.randomSpawn = function() {
 		
 		if (!this.hasAnotherMove()) {
 			return this.endGame()
@@ -94,18 +121,7 @@ function Board(grid) {
 			target = _.sample(emptyCells)
 		}
 		
-		var row = target[0]
-		var col = target[1]
-		
-		// fill with either the first or second colors. 90% first color, 10% second
-		var color = Math.random() < 0.1 ? 2 : 1
-		this.lastVisited.push([row, col])
-		this.grid[row][col] = color
-		
-		// add element to DOM
-		Events.emit('spawn', {row: row, col: col, color: color})
-		
-		return [row, col] // used for tutorial
+		return target
 	}
 	
 	this.endGame = function() {

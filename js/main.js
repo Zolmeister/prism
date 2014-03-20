@@ -129,13 +129,13 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 });
 
 // init
-GAME.board.spawn()
-var spawnPos = GAME.board.spawn() // store the spawn position for the tutorial. [row, col]
-
 // Run the tutorial for first-time visitors
 if(!localStorage['tutorial-shown']) {
-	GAME.tutorial = new Tutorial(spawnPos)
+	GAME.board.newGame([[2,1],[2,2]])
+	GAME.tutorial = new Tutorial([2, 1])
 	localStorage['tutorial-shown'] = 1
+} else {
+	GAME.board.newGame()
 }
 
 function sizing() {
