@@ -134,7 +134,7 @@ function Board(grid) {
 						combine = grid[row][col]
 						if (grid[row][col] === grid[row + diff[0]][col + diff[1]]) {
 							combine = grid[row][col] + 1 + Math.random() / 2
-							this.score += Math.pow(grid[row][col], 2)
+							this.score += Math.pow(grid[row][col] * 2, 2)
 						}
 							
 						grid[row][col] = 0
