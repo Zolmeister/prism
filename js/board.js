@@ -25,6 +25,8 @@ function Board(grid) {
 		this.score = 0
 		this.isGameOver = false
 	}
+	
+	this.lastVisited = []
 		
 	this.hasAnotherMove = function() {
 		for(var r=0;r<this.grid.length;r++) {
@@ -48,9 +50,31 @@ function Board(grid) {
 		return false
 	}
 	
+	this.sampleWithout = function(arr, exclude) {
+		var result = []
+		
+		for(var i=0;i<arr.length;i++) {
+			var cell = arr[i];
+			for(var j=0;j<exclude.length;j++) {
+				var exCell = exclude[j];
+				if (_.isEqual(cell, exCell)) break
+			}
+			
+			if (j === exclude.length) {
+				result.push(cell)
+			}
+		}
+		
+		return _.sample(result)
+	}
+	
 	this.spawn = function() {
 		
-		// get random empty grid cell
+		if (!this.hasAnotherMove()) {
+			return this.endGame()
+		}
+		
+		// get random empty grid cell that didn't have any blocks last time
 		var emptyCells = []
 		for(var r=0;r<this.grid.length;r++) {
 			for(var c=0;c<this.grid[0].length;c++) {
@@ -60,15 +84,16 @@ function Board(grid) {
 			}
 		}
 		
-		if (!this.hasAnotherMove()) {
-			return this.endGame()
-		}
-		
 		if (!emptyCells.length) {
 			return;
 		}
 		
-		var target = _.sample(emptyCells)
+		var target = this.sampleWithout(emptyCells, this.lastVisited)
+		
+		if (!target) {
+			target = _.sample(emptyCells)
+		}
+		
 		var row = target[0]
 		var col = target[1]
 		
@@ -116,6 +141,8 @@ function Board(grid) {
 			cols.reverse()
 		}
 
+		this.lastVisited = []
+		
 		// Hack, is something has been combined, it has 0.1 added to it temporarily
 		for(var r=0;r<rows.length;r++) {
 			for(var c=0;c<cols.length;c++) {
@@ -136,7 +163,8 @@ function Board(grid) {
 							combine = grid[row][col] + 1 + Math.random() / 2
 							this.score += Math.pow(grid[row][col] * 2, 2)
 						}
-							
+						
+						this.lastVisited.push([row, col])
 						grid[row][col] = 0
 						row += diff[0]
 						col += diff[1]

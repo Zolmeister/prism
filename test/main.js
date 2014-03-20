@@ -184,4 +184,18 @@ describe('Game Board', function () {
 		})
 		
 	})
+	
+	describe('sampleWithout()', function() {
+		var board = new Board([
+				[0, 0, 0, 0],
+				[0, 0, 2, 2],
+				[0, 1, 1, 0],
+				[0, 3, 0, 3]
+			])
+		
+		it('samples without', function() {
+			assert.strictEqual(board.sampleWithout([[1,2],[3,4]], [[1,2]]).toString(), '3,4')
+			assert.strictEqual(board.sampleWithout([[1,2],[3,4],[5,6],[7,8]], [[1,2],[7,8],[5,6]]).toString(), '3,4')
+		})
+	})
 })
