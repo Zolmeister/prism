@@ -1,6 +1,6 @@
 var assert = require("assert")
 _ = require('lodash')
-var Board = require('./../board')
+var Board = require('./../js/board')
 
 var board;
 
