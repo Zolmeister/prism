@@ -4,8 +4,6 @@ var GAME = {
 	board: new Board()
 }
 
-'tile tile-0-0 tile-phase-1'
-
 var $grid = $('.grid')[0]
 Events.on('move', function(move) {
 	if (move.fromRow === move.toRow && move.fromCol === move.toCol) return;
@@ -51,7 +49,11 @@ Events.on('setColor', function(elem) {
 	} catch (e) {}
 })
 
+// super hack to prevent multiple buttons spawning end of game
+var gameOverOnce = false
 Events.on('gameOver', function() {
+	console.log('GAME OVER')
+	maxColor = 0
 	var infoScreen = document.getElementById('info-screen')
 	infoScreen.className = 'show'
 	var gameOverBox = document.getElementById('game-over-box')
@@ -64,16 +66,19 @@ Events.on('gameOver', function() {
 		Events.emit('challengeFriend')
 	})
 	
-	var gameOverButton = document.createElement('button')
-	gameOverButton.innerText = 'Play Again'
-	gameOverButton.className = 'play-again'
-	// Should add some sort of fastclick here... (touch first)
-	gameOverButton.addEventListener('click', function() {
-		Events.emit('restartGame')
-	})
-	
-	gameOverBox.appendChild(challengeButton)
-	gameOverBox.appendChild(gameOverButton)
+	if (!gameOverOnce) {
+		var gameOverButton = document.createElement('button')
+		gameOverButton.innerText = 'Play Again'
+		gameOverButton.className = 'play-again'
+		// Should add some sort of fastclick here... (touch first)
+		gameOverButton.addEventListener('click', function() {
+			Events.emit('restartGame')
+		})
+		
+		gameOverBox.appendChild(challengeButton)
+		gameOverBox.appendChild(gameOverButton)
+		gameOverOnce = true
+	}
 })
 
 Events.on('challengeFriend', function() {
@@ -88,11 +93,10 @@ Events.on('challengeFriend', function() {
 })
 
 Events.on('restartGame', function() {
-	GAME.board.resetGrid()
-	GAME.board.score = 0
 	$('.grid')[0].innerHTML = ''
 	document.getElementById('progress-cover').className = 'progress-0'
-	document.getElementById('info-screen').style.display = 'none'
+	document.getElementById('info-screen').className = 'hide'
+	GAME.board.newGame()
 })
 
 // keybindings

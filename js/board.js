@@ -4,6 +4,7 @@ function Board(grid) {
 	this.score = 0
 	this.isGameOver = false
 	
+	
 	this.resetGrid = function() {
 		this.grid = _.map(Array(4), function() {
 			return _.map(Array(4), function() {
@@ -17,6 +18,14 @@ function Board(grid) {
 	else
 		this.resetGrid()
 	
+	this.newGame = function() {
+		this.resetGrid()
+		this.spawn()
+		this.spawn()
+		this.score = 0
+		this.isGameOver = false
+	}
+		
 	this.hasAnotherMove = function() {
 		for(var r=0;r<this.grid.length;r++) {
 			for(var c=0;c<this.grid[0].length;c++) {
