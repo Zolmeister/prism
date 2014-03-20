@@ -52,7 +52,6 @@ Events.on('setColor', function(elem) {
 // super hack to prevent multiple buttons spawning end of game
 var gameOverOnce = false
 Events.on('gameOver', function() {
-	console.log('GAME OVER')
 	maxColor = 0
 	var infoScreen = document.getElementById('info-screen')
 	infoScreen.className = 'show'
