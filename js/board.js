@@ -99,6 +99,7 @@ function Board(grid) {
 		
 		// fill with either the first or second colors. 90% first color, 10% second
 		var color = Math.random() < 0.1 ? 2 : 1
+		this.lastVisited.push([row, col])
 		this.grid[row][col] = color
 		
 		// add element to DOM
@@ -118,7 +119,9 @@ function Board(grid) {
 		if (GAME.tutorial)
 			GAME.tutorial.nextStep()
 		this._move(dir)
-		this.spawn()
+		if (this.lastVisited.length !== 0) {
+			this.spawn()
+		}
 	}
 	
 	this._move = function(dir) {
