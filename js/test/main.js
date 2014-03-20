@@ -9,7 +9,7 @@ function stringify(board) {
 }
 
 function flat(board) {
-	return JSON.stringify(_.filter(_.flatten(board.grid)))
+	return _.filter(_.flatten(board.grid))
 }
 
 function pretty(board) {
@@ -32,11 +32,11 @@ describe('Game Board', function () {
 	describe('spawn()', function () {
 		it('should spawn a value in a random location', function () {
 			
-			assert.strictEqual(flat(board), '[]')
+			assert.strictEqual(flat(board).length, 0)
 			board.spawn()
-			assert.strictEqual(flat(board), '[1]')
+			assert.strictEqual(flat(board).length, 1)
 			board.spawn()
-			assert.strictEqual(flat(board), '[1,1]')
+			assert.strictEqual(flat(board).length, 2)
 			
 		})
 	})
