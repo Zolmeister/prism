@@ -78,6 +78,10 @@ function Board(grid) {
 	}
 	
 	this.spawn = function(row, col) {
+		if (!this.hasAnotherMove()) {
+			return this.endGame()
+		}
+		
 		if(!row && !col) {
 			var pos = this.randomSpawn()
 			row = pos[0]
@@ -96,10 +100,6 @@ function Board(grid) {
 	}
 	
 	this.randomSpawn = function() {
-		
-		if (!this.hasAnotherMove()) {
-			return this.endGame()
-		}
 		
 		// get random empty grid cell that didn't have any blocks last time
 		var emptyCells = []
@@ -135,9 +135,14 @@ function Board(grid) {
 		if (GAME.tutorial)
 			GAME.tutorial.nextStep()
 		this._move(dir)
+		if (!this.hasAnotherMove()) {
+			return this.endGame()
+		}
 		if (this.lastVisited.length !== 0) {
 			this.spawn()
 		}
+		
+		// game complete
 		if (_.contains(_.flatten(this.grid), 10)) {
 			this.endGame()
 		}
