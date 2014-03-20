@@ -143,6 +143,8 @@ function Board(grid) {
 						grid[row][col] = combine
 						
 					}
+					
+					Events.emit('score', this.score);
 					Events.emit('move', {fromRow: fromRow, toRow: row, fromCol: fromCol, toCol: col});
 					Events.emit('setColor', {row:row, col: col, color: Math.floor(combine)});
 				}
@@ -259,6 +261,10 @@ Events.on('restartGame', function() {
 	document.getElementById('progress-cover').className = 'progress-0'
 	document.getElementById('info-screen').className = 'hide'
 	GAME.board.newGame()
+})
+
+Events.on('score', function(score) {
+	$('#score')[0].innerHTML = score;
 })
 
 // keybindings

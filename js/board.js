@@ -143,6 +143,8 @@ function Board(grid) {
 						grid[row][col] = combine
 						
 					}
+					
+					Events.emit('score', this.score);
 					Events.emit('move', {fromRow: fromRow, toRow: row, fromCol: fromCol, toCol: col});
 					Events.emit('setColor', {row:row, col: col, color: Math.floor(combine)});
 				}

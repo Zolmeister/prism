@@ -98,6 +98,10 @@ Events.on('restartGame', function() {
 	GAME.board.newGame()
 })
 
+Events.on('score', function(score) {
+	$('#score')[0].innerHTML = score;
+})
+
 // keybindings
 var move = 'left';
 Hammer(window).on("dragleft", function(e) {
