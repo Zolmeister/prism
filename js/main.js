@@ -104,7 +104,11 @@ Events.on('score', function(score) {
 
 // keybindings
 var move = 'left';
-Hammer(window).on("dragleft", function(e) {
+Hammer(window, {
+	drag_min_distance:5, 
+	drag_block_horizontal:true, 
+	drag_block_vertical:true
+}).on("dragleft", function(e) {
 	e.preventDefault()
 	e.gesture.preventDefault()
 	move='left'
