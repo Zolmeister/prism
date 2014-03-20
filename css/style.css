@@ -94,7 +94,7 @@ body {
 }
 .info h1, .info h2 {
 	font-size: 5em;
-	margin: 0.25em 0;
+	margin: 0.125em 0;
 	display: inline-block;
 	background: -webkit-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
 	-webkit-background-clip: text;
@@ -102,10 +102,14 @@ body {
 }
 .info h2 {
 	font-size: 2em;
+	margin: 0 0 0.5em 0;
 }
 
 #game-over-box {
 	display: none;
+}
+#game-over-box .score {
+	margin-top: 0;
 }
 
 button {
@@ -389,7 +393,26 @@ button:active:after {
   margin-left: -14px;
 }
 
+.brand, .share {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	z-index: 10;
+}
+.brand a {
+	display: block;
+	opacity: 0.3;
+	transition: opacity 0.5s;
+}
+.brand a:hover {
+	opacity: 1;
+	transition: opacity 0.5s;
+}
 
+.share {
+	left: 0;
+	right: auto;
+}
 /* Ghetto, but the animations are only run once otherwise... (not for each new color combo). See http://css-tricks.com/restart-css-animation/ */
 @-webkit-keyframes mergeAnimation1
 {

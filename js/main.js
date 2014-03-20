@@ -58,6 +58,10 @@ Events.on('gameOver', function() {
 	var gameOverBox = document.getElementById('game-over-box')
 	gameOverBox.style.display = 'block'
 	
+	// move the score element inside this div, we move back to it's original spot when a new game is started
+	if(scoreWrapperEle = $('.score-wrapper')[0])
+		gameOverBox.appendChild(scoreWrapperEle)
+	
 	var challengeButton = document.createElement('button')
 	challengeButton.innerText = 'Challenge a Friend'
 	// Should add some sort of fastclick here... (touch first)
@@ -95,11 +99,15 @@ Events.on('restartGame', function() {
 	$('.grid')[0].innerHTML = ''
 	document.getElementById('progress-cover').className = 'progress-0'
 	document.getElementById('info-screen').className = 'hide'
+	// move the score element back to where it was before
+	if(scoreWrapperEle = $('.score-wrapper')[0])
+		document.body.appendChild(scoreWrapperEle)
 	GAME.board.newGame()
 })
 
+scoreEle = $('#score')[0]
 Events.on('score', function(score) {
-	$('#score')[0].innerHTML = score;
+	scoreEle.innerHTML = score;
 })
 
 // keybindings
@@ -142,9 +150,16 @@ if(!localStorage['tutorial-shown']) {
 	GAME.board.newGame()
 }
 
+window.addEventListener('load', function() {
+	// Load in sharing buttons
+	// TODO
+	html = '<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fclay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 50px; height:21px;"></iframe><iframe src="//platform.twitter.com/widgets/follow_button.html?screen_name=claydotio&show_count=false" style="width:130px; height:20px; border: none; overflow: hidden;"></iframe>'
+	document.getElementById('share').innerHTML = html
+})
+
 function sizing() {
-	var gridWidth = $grid.offsetWidth
-	var gridHeight = $grid.offsetHeight
+	var gridWidth = window.innerWidth
+	var gridHeight = window.innerHeight - $('.grid-inner')[0].offsetTop * 2 // .grid-outer padding
 	var boxSize = Math.min(gridWidth, gridHeight)
 	$('.grid-background')[0].style.width = boxSize + 'px'
 	$('.grid-background')[0].style.height = (boxSize - 14) + 'px' // 7px  padding
