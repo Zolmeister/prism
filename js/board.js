@@ -122,6 +122,9 @@ function Board(grid) {
 		if (this.lastVisited.length !== 0) {
 			this.spawn()
 		}
+		if (_.contains(_.flatten(this.grid), 10)) {
+			this.endGame()
+		}
 	}
 	
 	this._move = function(dir) {
