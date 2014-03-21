@@ -440,18 +440,21 @@ button:active:after {
 .brand {
 	position: fixed;
 	bottom: 10px;
-	left: 50%;
-	margin-left: -75px;
+	width: 100%;
+	text-align: center;
 	z-index: 10;
 }
 .brand a {
-	display: block;
 	opacity: 0.3;
 	transition: opacity 0.5s;
+	color: #000;
 }
 .brand a:hover {
 	opacity: 1;
 	transition: opacity 0.5s;
+}
+.brand div {
+	font-size: 0.8em;
 }
 
 /* Ghetto, but the animations are only run once otherwise... (not for each new color combo). See http://css-tricks.com/restart-css-animation/ */
