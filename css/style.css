@@ -10,6 +10,11 @@ html, body {
 
 body {
 	background: #f5f5f5;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .bubble-wrapper {
@@ -453,6 +458,9 @@ button:active:after {
 	opacity: 1;
 	transition: opacity 0.5s;
 }
+.brand img {
+	border: none;
+}
 .brand div {
 	font-size: 0.8em;
 }
@@ -547,5 +555,8 @@ button:active:after {
 	.bubble {
 		top: 25px;
 		margin-bottom: 10px;
+	}
+	.brand div {
+		font-size: 0.7em;
 	}
 }
