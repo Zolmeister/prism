@@ -29,6 +29,7 @@ Events.on('spawn', function(spawn) {
 	var $div = document.createElement('div')
 	var $tile = document.createElement('div')
 	$tile.setAttribute('class', 'tile '+'tile-'+spawn.row+'-'+spawn.col+' tile-phase-'+(spawn.color-1))
+	$div.setAttribute('class', 'tile-inner')
 	$tile.appendChild($div)
 	$grid.appendChild($tile)
 })
