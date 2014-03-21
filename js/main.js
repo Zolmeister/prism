@@ -66,11 +66,6 @@ Events.on('gameOver', function() {
 		Events.emit('challengeFriend')
 	})
 	
-	// move the score element inside this div, we move back to it's original spot when a new game is started
-	var $scoreWrapperEle = $('.bubble-wrapper')[0]
-	if($scoreWrapperEle)
-		$gameOverBox.appendChild($scoreWrapperEle)
-	
 	if (!gameOverOnce) {
 		var $gameOverButton = document.createElement('button')
 		$gameOverButton.innerText = 'Play Again'
@@ -84,6 +79,11 @@ Events.on('gameOver', function() {
 		$gameOverBox.appendChild($gameOverButton)
 		gameOverOnce = true
 	}
+	
+	// move the score element inside this div, we move back to it's original spot when a new game is started
+	var $scoreWrapperEle = $('.bubble-wrapper')[0]
+	if($scoreWrapperEle)
+		$gameOverBox.appendChild($scoreWrapperEle)
 })
 
 Events.on('challengeFriend', function() {
