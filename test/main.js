@@ -1,8 +1,11 @@
 var assert = require("assert")
 _ = require('lodash')
 var Board = require('./../js/board')
-
 var board;
+
+GAME={
+	board: board
+}
 
 function stringify(board) {
 	return JSON.stringify(board.grid)
@@ -196,6 +199,33 @@ describe('Game Board', function () {
 		it('samples without', function() {
 			assert.strictEqual(board.sampleWithout([[1,2],[3,4]], [[1,2]]).toString(), '3,4')
 			assert.strictEqual(board.sampleWithout([[1,2],[3,4],[5,6],[7,8]], [[1,2],[7,8],[5,6]]).toString(), '3,4')
+		})
+	})
+	
+	describe('endGame()', function() {
+		
+		it('loses the game', function() {
+			var board = new Board([
+				[1, 2, 3, 4],
+				[5, 6, 7, 8],
+				[1, 2, 3, 4],
+				[5, 6, 7, 8]
+			])
+			
+			board.move('right')
+			assert(board.isGameOver)
+		})
+		
+		it('wins the game', function() {
+			var board = new Board([
+				[1, 2, 3, 4],
+				[5, 6, 7, 8],
+				[1, 2, 3, 4],
+				[0, 0, 9, 9]
+			])
+			
+			board.move('right')
+			assert(board.isGameOver)
 		})
 	})
 })
