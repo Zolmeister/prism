@@ -199,7 +199,7 @@ window.addEventListener('load', function() {
 function sizing() {
 	var gridWidth = window.innerWidth
 	var gridHeight = window.innerHeight - $('.grid-inner')[0].offsetTop * 2 // .grid-outer padding
-	var boxSize = Math.min(gridWidth, gridHeight)
+	var boxSize = Math.min(gridWidth, gridHeight) * 0.94 // 3% css padding
 	$('.grid-background')[0].style.width = boxSize + 'px'
 	$('.grid-background')[0].style.height = (boxSize - 14) + 'px' // 7px  padding
 }

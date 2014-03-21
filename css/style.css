@@ -196,7 +196,7 @@ button:active:after {
 	display: table;
 	top: 0;
 	left: 0;
-	padding: 100px 3% 50px 3%;
+	padding: 100px 3% 50px 3%; /* change js in sizing() if 3% is changed */
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
