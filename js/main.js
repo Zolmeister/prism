@@ -71,6 +71,10 @@ Events.on('gameOver', function() {
 	if($scoreWrapperEle)
 		$gameOverBox.appendChild($scoreWrapperEle)
 	
+	var $shareBubble = $('.share-bubble')[0]
+	if($shareBubble)
+		$shareBubble.style.display = 'none'
+	
 	if (!gameOverOnce) {
 		var $gameOverButton = document.createElement('button')
 		$gameOverButton.innerText = 'Play Again'
@@ -104,8 +108,14 @@ Events.on('restartGame', function() {
 	document.getElementById('progress-cover').className = 'progress-0'
 	document.getElementById('info-screen').className = 'hide'
 	// move the score element back to where it was before
-	if($scoreWrapperEle = $('.bubble-wrapper')[0])
+	var $scoreWrapperEle = $('.bubble-wrapper')[0]
+	if($scoreWrapperEle)
 		document.body.appendChild($scoreWrapperEle)
+
+	var $shareBubble = $('.share-bubble')[0]
+	if($shareBubble)
+		$shareBubble.style.display = 'inline-block'
+		
 	GAME.board.newGame()
 })
 
@@ -162,6 +172,7 @@ window.addEventListener('load', function() {
 		var $share = document.createElement('a')
 		$share.className = 'kik-share' 
 		$share.href = '#'
+		$share.id = 'kik-share'
 		$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
 		$share.addEventListener('touchstart', function() {
 			Clay.Kik.post({
