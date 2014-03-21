@@ -311,6 +311,11 @@ Events.on('gameOver', function() {
 		Events.emit('challengeFriend')
 	})
 	
+	// move the score element inside this div, we move back to it's original spot when a new game is started
+	var scoreWrapperEle = $('.bubble-wrapper')[0]
+	if(scoreWrapperEle)
+		gameOverBox.appendChild(scoreWrapperEle)
+	
 	if (!gameOverOnce) {
 		var gameOverButton = document.createElement('button')
 		gameOverButton.innerText = 'Play Again'
@@ -324,11 +329,6 @@ Events.on('gameOver', function() {
 		gameOverBox.appendChild(gameOverButton)
 		gameOverOnce = true
 	}
-	
-	// move the score element inside this div, we move back to it's original spot when a new game is started
-	var scoreWrapperEle = $('.score-wrapper')[0]
-	if(scoreWrapperEle)
-		gameOverBox.appendChild(scoreWrapperEle)
 })
 
 Events.on('challengeFriend', function() {
@@ -349,7 +349,7 @@ Events.on('restartGame', function() {
 	document.getElementById('progress-cover').className = 'progress-0'
 	document.getElementById('info-screen').className = 'hide'
 	// move the score element back to where it was before
-	if(scoreWrapperEle = $('.score-wrapper')[0])
+	if(scoreWrapperEle = $('.bubble-wrapper')[0])
 		document.body.appendChild(scoreWrapperEle)
 	GAME.board.newGame()
 })
@@ -403,11 +403,27 @@ if(!localStorage['tutorial-shown']) {
 
 window.addEventListener('load', function() {
 	// Load in sharing buttons
-	// TODO
-	html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
-	html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
-	document.getElementById('share').innerHTML = html
+	if(cards.kik) {
+		var share = document.createElement('a')
+		share.className = 'kik-share' 
+		share.href = '#'
+		share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
+		share.addEventListener('touchstart', function() {
+			Clay.Kik.post({
+				message: 'Come play Prism, the most addicting game on Kik!',
+				title: 'Prism',
+				data: {}
+			})
+		})
+		document.getElementById('share').appendChild(share)
+	}
+	else {
+		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
+		html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
+		document.getElementById('share').innerHTML = html
+	}
 })
+
 
 function sizing() {
 	var gridWidth = window.innerWidth

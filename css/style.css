@@ -14,6 +14,8 @@ body {
 
 .bubble-wrapper {
 	text-align: center;
+	position: relative;
+	z-index: 10;
 }
 .bubble {
 	padding: 10px;
@@ -33,15 +35,25 @@ body {
 }
 .share-bubble {
 	padding-top: 8px;
-	background: #cbe0e3;
+	background: #A3C5CA;
 }
 
 .share {
 	width: 200px;
 	height: 24px;
 	white-space: nowrap;
-	position: relative;
-	z-index: 10;
+}
+.kik-share {
+	color: #fff;
+	text-decoration: none;
+}
+.kik-share img {
+	height: 1em;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+.kik-share span {
+	vertical-align: bottom;
 }
 
 #progress-bar {	
@@ -133,8 +145,8 @@ body {
 #game-over-box {
 	display: none;
 }
-#game-over-box .score {
-	margin-top: 0;
+#game-over-box .bubble {
+	top: 0;
 }
 
 button {
