@@ -58,10 +58,6 @@ Events.on('gameOver', function() {
 	var gameOverBox = document.getElementById('game-over-box')
 	gameOverBox.style.display = 'block'
 	
-	// move the score element inside this div, we move back to it's original spot when a new game is started
-	if(scoreWrapperEle = $('.score-wrapper')[0])
-		gameOverBox.appendChild(scoreWrapperEle)
-	
 	var challengeButton = document.createElement('button')
 	challengeButton.innerText = 'Challenge a Friend'
 	// Should add some sort of fastclick here... (touch first)
@@ -82,6 +78,11 @@ Events.on('gameOver', function() {
 		gameOverBox.appendChild(gameOverButton)
 		gameOverOnce = true
 	}
+	
+	// move the score element inside this div, we move back to it's original spot when a new game is started
+	var scoreWrapperEle = $('.score-wrapper')[0]
+	if(scoreWrapperEle)
+		gameOverBox.appendChild(scoreWrapperEle)
 })
 
 Events.on('challengeFriend', function() {
@@ -145,7 +146,9 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 // init
 // Run the tutorial for first-time visitors
 if(!localStorage['tutorial-shown']) {
-	GAME.board.newGame([[2,1],[2,2]])
+	
+	// row, col, color
+	GAME.board.newGame([[2,1,1],[2,2,1]])
 	GAME.tutorial = new Tutorial([2, 1])
 	localStorage['tutorial-shown'] = 1
 } else {

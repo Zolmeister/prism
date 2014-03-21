@@ -8,18 +8,19 @@ function Tutorial(spawnPos) {
 		position: 'absolute' // relative to grid
 	}, {
 		message: "Combine same-color tiles to make a new color",
-		x: ( spawnPos[1] * 25 ) + '%', // percent so it works w/ any scaling
-		y: ( spawnPos[0] * 25 ) + '%',	
-		position: 'absolute' // relative to grid	
+		x: '35%', // percent so it works w/ any scaling
+		y: '10%',	
+		position: 'absolute', // relative to grid,
+		noarrow: true
 	}, {
 		message: "Your progress is shown on this bar",
 		x: '50%', // percent so it works w/ any scaling
-		y: '5px',
+		y: '10px',
 		position: 'fixed' // relative to document		
 	}, {
 		message: "You win by making the full rainbow",
 		x: '50%', // percent so it works w/ any scaling
-		y: '5px',
+		y: '10px',
 		position: 'fixed' // relative to document
 	}]
 	
@@ -44,6 +45,7 @@ function Tutorial(spawnPos) {
 		$tipWrapper.id = 'tip'
 		var x = this.steps[this.currentStep].x
 		var y = this.steps[this.currentStep].y
+		var noarrow = this.steps[this.currentStep].noarrow
 		
 		var yOrientation = y.indexOf('%') !== -1 && parseInt(y) >= 50 ? 'bottom' : 'top'
 		if(yOrientation == 'bottom')
@@ -67,16 +69,15 @@ function Tutorial(spawnPos) {
 		var $tip = document.createElement('div')
 		$tip.innerHTML = this.steps[this.currentStep].message
 		
-		var $nextStep = document.createElement('a')
-		$nextStep.innerText = 'Next Step'
 		// TODO: fastclick
 		var _this = this
-		$nextStep.addEventListener('click', function() {
-			_this.nextStep()
-		})
 		
 		var $arrow = document.createElement( 'div' )
 		var $arrowBorder = document.createElement( 'div' )
+		if (noarrow) {
+			$arrow.style.display = 'none';
+			$arrowBorder.style.display = 'none';
+		}
 		if(yOrientation == 'bottom') {
 			$arrow.className = 'arrow-bottom'
 			$arrowBorder.className = 'arrow-bottom-border'
@@ -87,7 +88,6 @@ function Tutorial(spawnPos) {
 		}
 		
 		$tipWrapper.appendChild($tip)
-		$tipWrapper.appendChild($nextStep)
 		$tipWrapper.appendChild($arrowBorder)
 		$tipWrapper.appendChild($arrow)
 		$('.grid-background')[0].appendChild($tipWrapper)

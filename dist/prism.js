@@ -1,3 +1,28 @@
+// bind polyfill (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)
+
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (oThis) {
+    if (typeof this !== "function") {
+      // closest thing possible to the ECMAScript 5 internal IsCallable function
+      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+    }
+
+    var aArgs = Array.prototype.slice.call(arguments, 1), 
+        fToBind = this, 
+        fNOP = function () {},
+        fBound = function () {
+          return fToBind.apply(this instanceof fNOP && oThis
+                                 ? this
+                                 : oThis,
+                               aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
+
+    return fBound;
+  };
+}
 function Board(grid) {
 	var Events = typeof window !== 'undefined' ? window.Events : {emit:function(){}};
 	
@@ -18,13 +43,24 @@ function Board(grid) {
 	else
 		this.resetGrid()
 	
-	this.newGame = function() {
+	this.newGame = function(startingPositions) {
 		this.resetGrid()
-		this.spawn()
-		this.spawn()
+		if (startingPositions) {
+			var self = this
+			_.forEach(startingPositions, function(pos){
+				self.spawn(pos[0], pos[1], pos[2])
+			})
+		} else {
+			this.spawn()
+			this.spawn()
+		}
+		
 		this.score = 0
+		Events.emit('score', this.score)
 		this.isGameOver = false
 	}
+	
+	this.lastVisited = []
 		
 	this.hasAnotherMove = function() {
 		for(var r=0;r<this.grid.length;r++) {
@@ -48,9 +84,50 @@ function Board(grid) {
 		return false
 	}
 	
-	this.spawn = function() {
+	this.sampleWithout = function(arr, exclude) {
+		var result = []
 		
-		// get random empty grid cell
+		for(var i=0;i<arr.length;i++) {
+			var cell = arr[i];
+			for(var j=0;j<exclude.length;j++) {
+				var exCell = exclude[j];
+				if (_.isEqual(cell, exCell)) break
+			}
+			
+			if (j === exclude.length) {
+				result.push(cell)
+			}
+		}
+		
+		return _.sample(result)
+	}
+	
+	this.spawn = function(row, col, color) {
+		if (!this.hasAnotherMove()) {
+			return this.endGame()
+		}
+		
+		if(!row && !col) {
+			var pos = this.randomSpawn()
+			row = pos[0]
+			col = pos[1]
+
+			// fill with either the first or second colors. 90% first color, 10% second
+			color = Math.random() < 0.1 ? 2 : 1
+		}
+
+		this.lastVisited.push([row, col])
+		this.grid[row][col] = color
+		
+		// add element to DOM
+		Events.emit('spawn', {row: row, col: col, color: color})
+		
+		return [row, col] // used for tutorial
+	}
+	
+	this.randomSpawn = function() {
+		
+		// get random empty grid cell that didn't have any blocks last time
 		var emptyCells = []
 		for(var r=0;r<this.grid.length;r++) {
 			for(var c=0;c<this.grid[0].length;c++) {
@@ -60,26 +137,17 @@ function Board(grid) {
 			}
 		}
 		
-		if (!this.hasAnotherMove()) {
-			return this.endGame()
-		}
-		
 		if (!emptyCells.length) {
 			return;
 		}
 		
-		var target = _.sample(emptyCells)
-		var row = target[0]
-		var col = target[1]
+		var target = this.sampleWithout(emptyCells, this.lastVisited)
 		
-		// fill with either the first or second colors. 90% first color, 10% second
-		var color = Math.random() < 0.1 ? 2 : 1
-		this.grid[row][col] = color
+		if (!target) {
+			target = _.sample(emptyCells)
+		}
 		
-		// add element to DOM
-		Events.emit('spawn', {row: row, col: col, color: color})
-		
-		return [row, col] // used for tutorial
+		return target
 	}
 	
 	this.endGame = function() {
@@ -93,7 +161,17 @@ function Board(grid) {
 		if (GAME.tutorial)
 			GAME.tutorial.nextStep()
 		this._move(dir)
-		this.spawn()
+		if (!this.hasAnotherMove()) {
+			return this.endGame()
+		}
+		if (this.lastVisited.length !== 0) {
+			this.spawn()
+		}
+		
+		// game complete
+		if (_.contains(_.flatten(this.grid), 10)) {
+			this.endGame()
+		}
 	}
 	
 	this._move = function(dir) {
@@ -116,6 +194,8 @@ function Board(grid) {
 			cols.reverse()
 		}
 
+		this.lastVisited = []
+		
 		// Hack, is something has been combined, it has 0.1 added to it temporarily
 		for(var r=0;r<rows.length;r++) {
 			for(var c=0;c<cols.length;c++) {
@@ -136,7 +216,8 @@ function Board(grid) {
 							combine = grid[row][col] + 1 + Math.random() / 2
 							this.score += Math.pow(grid[row][col] * 2, 2)
 						}
-							
+						
+						this.lastVisited.push([row, col])
 						grid[row][col] = 0
 						row += diff[0]
 						col += diff[1]
@@ -243,14 +324,21 @@ Events.on('gameOver', function() {
 		gameOverBox.appendChild(gameOverButton)
 		gameOverOnce = true
 	}
+	
+	// move the score element inside this div, we move back to it's original spot when a new game is started
+	var scoreWrapperEle = $('.score-wrapper')[0]
+	if(scoreWrapperEle)
+		gameOverBox.appendChild(scoreWrapperEle)
 })
 
 Events.on('challengeFriend', function() {
 	var score = GAME.board.score;
 	Clay.Social.smartShare({
-		message: 'Think you can beat my score?',
-		title: 'I just scored ' + score + ' in Prism!', 
+		message: 'I just scored ' + score + ' in Prism! Think you can beat my score?',
+		title: 'Prism', 
+		link: 'http://prism.clay.io',
 		//image: screenshotURL,
+		ignoreScreenshot: true,
 		data: {},
 		//respond: // the username of our opponent // cards.kik.returnToConversation
 	})
@@ -260,16 +348,24 @@ Events.on('restartGame', function() {
 	$('.grid')[0].innerHTML = ''
 	document.getElementById('progress-cover').className = 'progress-0'
 	document.getElementById('info-screen').className = 'hide'
+	// move the score element back to where it was before
+	if(scoreWrapperEle = $('.score-wrapper')[0])
+		document.body.appendChild(scoreWrapperEle)
 	GAME.board.newGame()
 })
 
+scoreEle = $('#score')[0]
 Events.on('score', function(score) {
-	$('#score')[0].innerHTML = score;
+	scoreEle.innerHTML = score;
 })
 
 // keybindings
 var move = 'left';
-Hammer(window).on("dragleft", function(e) {
+Hammer(window, {
+	drag_min_distance:5, 
+	drag_block_horizontal:true, 
+	drag_block_vertical:true
+}).on("dragleft", function(e) {
 	e.preventDefault()
 	e.gesture.preventDefault()
 	move='left'
@@ -294,18 +390,28 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 });
 
 // init
-GAME.board.spawn()
-var spawnPos = GAME.board.spawn() // store the spawn position for the tutorial. [row, col]
-
 // Run the tutorial for first-time visitors
 if(!localStorage['tutorial-shown']) {
-	GAME.tutorial = new Tutorial(spawnPos)
+	
+	// row, col, color
+	GAME.board.newGame([[2,1,1],[2,2,1]])
+	GAME.tutorial = new Tutorial([2, 1])
 	localStorage['tutorial-shown'] = 1
+} else {
+	GAME.board.newGame()
 }
 
+window.addEventListener('load', function() {
+	// Load in sharing buttons
+	// TODO
+	html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
+	html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
+	document.getElementById('share').innerHTML = html
+})
+
 function sizing() {
-	var gridWidth = $grid.offsetWidth
-	var gridHeight = $grid.offsetHeight
+	var gridWidth = window.innerWidth
+	var gridHeight = window.innerHeight - $('.grid-inner')[0].offsetTop * 2 // .grid-outer padding
 	var boxSize = Math.min(gridWidth, gridHeight)
 	$('.grid-background')[0].style.width = boxSize + 'px'
 	$('.grid-background')[0].style.height = (boxSize - 14) + 'px' // 7px  padding
@@ -325,18 +431,19 @@ function Tutorial(spawnPos) {
 		position: 'absolute' // relative to grid
 	}, {
 		message: "Combine same-color tiles to make a new color",
-		x: ( spawnPos[1] * 25 ) + '%', // percent so it works w/ any scaling
-		y: ( spawnPos[0] * 25 ) + '%',	
-		position: 'absolute' // relative to grid	
+		x: '35%', // percent so it works w/ any scaling
+		y: '10%',	
+		position: 'absolute', // relative to grid,
+		noarrow: true
 	}, {
 		message: "Your progress is shown on this bar",
 		x: '50%', // percent so it works w/ any scaling
-		y: '5px',
+		y: '10px',
 		position: 'fixed' // relative to document		
 	}, {
 		message: "You win by making the full rainbow",
 		x: '50%', // percent so it works w/ any scaling
-		y: '5px',
+		y: '10px',
 		position: 'fixed' // relative to document
 	}]
 	
@@ -361,6 +468,7 @@ function Tutorial(spawnPos) {
 		$tipWrapper.id = 'tip'
 		var x = this.steps[this.currentStep].x
 		var y = this.steps[this.currentStep].y
+		var noarrow = this.steps[this.currentStep].noarrow
 		
 		var yOrientation = y.indexOf('%') !== -1 && parseInt(y) >= 50 ? 'bottom' : 'top'
 		if(yOrientation == 'bottom')
@@ -384,16 +492,15 @@ function Tutorial(spawnPos) {
 		var $tip = document.createElement('div')
 		$tip.innerHTML = this.steps[this.currentStep].message
 		
-		var $nextStep = document.createElement('a')
-		$nextStep.innerText = 'Next Step'
 		// TODO: fastclick
 		var _this = this
-		$nextStep.addEventListener('click', function() {
-			_this.nextStep()
-		})
 		
 		var $arrow = document.createElement( 'div' )
 		var $arrowBorder = document.createElement( 'div' )
+		if (noarrow) {
+			$arrow.style.display = 'none';
+			$arrowBorder.style.display = 'none';
+		}
 		if(yOrientation == 'bottom') {
 			$arrow.className = 'arrow-bottom'
 			$arrowBorder.className = 'arrow-bottom-border'
@@ -404,7 +511,6 @@ function Tutorial(spawnPos) {
 		}
 		
 		$tipWrapper.appendChild($tip)
-		$tipWrapper.appendChild($nextStep)
 		$tipWrapper.appendChild($arrowBorder)
 		$tipWrapper.appendChild($arrow)
 		$('.grid-background')[0].appendChild($tipWrapper)
@@ -422,3 +528,4 @@ function Tutorial(spawnPos) {
 if(typeof module !== 'undefined') {
 	module.exports = Tutorial
 }
+//# sourceMappingURL=prism.js.map
