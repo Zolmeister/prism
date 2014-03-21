@@ -243,7 +243,7 @@ button:active:after {
 	-webkit-animation: spawnTile 0.5s;
 	animation: spawnTile 0.5s;
 }
-.tile div {
+.tile-inner {
 	transition: background-color 1s;
 	-webkit-transition: background-color 1s;
 	position: relative;
@@ -252,7 +252,7 @@ button:active:after {
 	-webkit-transform: scale(0.85); /* alternatively can do padding on parent ele, but when we scale up/down it doesn't fit the full space */
 	border-radius: 10px;
 }
-.tile div:after {
+.tile-inner:after {
 	position: absolute;
 	content: '';
 	width: 100%;
@@ -262,59 +262,59 @@ button:active:after {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
-.tile-phase-0 div {
+.tile-phase-0 .tile-inner {
 	background: #ddd;
 	z-index: 1;
 }
-.tile-phase-1 div {
+.tile-phase-1 .tile-inner {
 	background: #78c5d5;
 	-webkit-animation: mergeAnimation1 0.5s;
 	animation: mergeAnimation1 0.5s;
 	z-index: 2;
 }
-.tile-phase-2 div {
+.tile-phase-2 .tile-inner {
 	background: #459ba8;
 	-webkit-animation: mergeAnimation2 0.5s;
 	animation: mergeAnimation2 0.5s;
 	z-index: 3;
 }
-.tile-phase-3 div {
+.tile-phase-3 .tile-inner {
 	background: #79c268;
 	-webkit-animation: mergeAnimation3 0.5s;
 	animation: mergeAnimation3 0.5s;
 	z-index: 4;
 }
-.tile-phase-4 div {
+.tile-phase-4 .tile-inner {
 	background: #c5d747;
 	-webkit-animation: mergeAnimation4 0.5s;
 	animation: mergeAnimation4 0.5s;
 	z-index: 5;
 }
-.tile-phase-5 div {
+.tile-phase-5 .tile-inner {
 	background: #f5d63d;
 	-webkit-animation: mergeAnimation5 0.5s;
 	animation: mergeAnimation5 0.5s;
 	z-index: 6;
 }
-.tile-phase-6 div {
+.tile-phase-6 .tile-inner {
 	background: #f18c32;
 	-webkit-animation: mergeAnimation6 0.5s;
 	animation: mergeAnimation6 0.5s;
 	z-index: 7;
 }
-.tile-phase-7 div {
+.tile-phase-7 .tile-inner {
 	background: #e868a1;
 	-webkit-animation: mergeAnimation7 0.5s;
 	animation: mergeAnimation7 0.5s;
 	z-index: 8;
 }
-.tile-phase-8 div {
+.tile-phase-8 .tile-inner {
 	background: #bf63a6;
 	-webkit-animation: mergeAnimation8 0.5s;
 	animation: mergeAnimation28 0.5s;
 	z-index: 9;
 }
-.tile-phase-9 div {
+.tile-phase-9 .tile-inner {
 	background: -webkit-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
 	-webkit-animation: mergeAnimation9 0.5s;
 	animation: mergeAnimation9 0.5s;
