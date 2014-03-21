@@ -143,7 +143,9 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 // init
 // Run the tutorial for first-time visitors
 if(!localStorage['tutorial-shown']) {
-	GAME.board.newGame([[2,1],[2,2]])
+	
+	// row, col, color
+	GAME.board.newGame([[2,1,1],[2,2,1]])
 	GAME.tutorial = new Tutorial([2, 1])
 	localStorage['tutorial-shown'] = 1
 } else {

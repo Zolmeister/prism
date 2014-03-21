@@ -23,7 +23,7 @@ function Board(grid) {
 		if (startingPositions) {
 			var self = this
 			_.forEach(startingPositions, function(pos){
-				self.spawn(pos[0], pos[1])
+				self.spawn(pos[0], pos[1], pos[2])
 			})
 		} else {
 			this.spawn()
@@ -77,7 +77,7 @@ function Board(grid) {
 		return _.sample(result)
 	}
 	
-	this.spawn = function(row, col) {
+	this.spawn = function(row, col, color) {
 		if (!this.hasAnotherMove()) {
 			return this.endGame()
 		}
@@ -86,10 +86,11 @@ function Board(grid) {
 			var pos = this.randomSpawn()
 			row = pos[0]
 			col = pos[1]
+
+			// fill with either the first or second colors. 90% first color, 10% second
+			color = Math.random() < 0.1 ? 2 : 1
 		}
-		
-		// fill with either the first or second colors. 90% first color, 10% second
-		var color = Math.random() < 0.1 ? 2 : 1
+
 		this.lastVisited.push([row, col])
 		this.grid[row][col] = color
 		
