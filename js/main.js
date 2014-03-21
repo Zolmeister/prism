@@ -153,7 +153,8 @@ if(!localStorage['tutorial-shown']) {
 window.addEventListener('load', function() {
 	// Load in sharing buttons
 	// TODO
-	html = '<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fclay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 50px; height:21px;"></iframe><iframe src="//platform.twitter.com/widgets/follow_button.html?screen_name=claydotio&show_count=false" style="width:130px; height:20px; border: none; overflow: hidden;"></iframe>'
+	html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 100px; height:21px;"></iframe>'
+	html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:130px; height:20px;"></iframe>'
 	document.getElementById('share').innerHTML = html
 })
 
