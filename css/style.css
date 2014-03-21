@@ -27,6 +27,7 @@ body {
 	top: 46px;
 	position: relative;
 	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	height: 38px;
 	vertical-align: top;
 }
@@ -537,4 +538,11 @@ button:active:after {
 	25%	{ opacity: 1; }
 	75%	{ opacity: 1; }
 	100% { opacity: 0; }
+}
+
+@media (max-width: 400px) {
+	.bubble {
+		top: 25px;
+		margin-bottom: 10px;
+	}
 }
