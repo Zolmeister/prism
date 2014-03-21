@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "file": "lib.js",
+  "sources": [
+    "lib/clay.io.min.js",
+    "lib/hammer.min.js",
+    "lib/lodash.min.js",
+    "lib/mousetrap.min.js"
+  ],
+  "names": [],
+  "mappings": "AAAA,w80D;ACAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA,yuZ;ACPA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA,qK;ACvDA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA",
+  "sourceRoot": "../"
+}
