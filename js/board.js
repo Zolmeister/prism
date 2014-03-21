@@ -38,8 +38,8 @@ function Board(grid) {
 	this.lastVisited = []
 		
 	this.hasAnotherMove = function() {
-		for(var r=0;r<this.grid.length;r++) {
-			for(var c=0;c<this.grid[0].length;c++) {
+		for(var r=0;r<4;r++) {
+			for(var c=0;c<4;c++) {
 				if (!this.grid[r][c]) {
 					return true
 				}
@@ -104,8 +104,8 @@ function Board(grid) {
 		
 		// get random empty grid cell that didn't have any blocks last time
 		var emptyCells = []
-		for(var r=0;r<this.grid.length;r++) {
-			for(var c=0;c<this.grid[0].length;c++) {
+		for(var r=0;r<4;r++) {
+			for(var c=0;c<4;c++) {
 				if(!this.grid[r][c]) {
 					emptyCells.push([r,c])
 				}
@@ -172,8 +172,8 @@ function Board(grid) {
 		this.lastVisited = []
 		
 		// Hack, is something has been combined, it has 0.1 added to it temporarily
-		for(var r=0;r<rows.length;r++) {
-			for(var c=0;c<cols.length;c++) {
+		for(var r=0;r<4;r++) {
+			for(var c=0;c<4;c++) {
 				var row = rows[r]
 				var col = cols[c]
 				
@@ -207,9 +207,11 @@ function Board(grid) {
 			}
 		}
 		
-		this.grid = _.map(grid, function(row) {
-			return _.map(row, Math.floor.bind(Math))
-		})
+		for(var r=0;r<4;r++) {
+			for(var c=0;c<4;c++) {
+				this.grid[r][c] = Math.floor(this.grid[r][c])
+			}
+		}
 	}
 }
 

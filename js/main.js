@@ -9,18 +9,18 @@ Events.on('move', function(move) {
 	if (move.fromRow === move.toRow && move.fromCol === move.toCol) return;
 	var $tiles = $('.tile-'+move.fromRow+'-'+move.fromCol)
 	var $old = $('.tile-'+move.toRow+'-'+move.toCol)[0]
-	_.map($tiles, function($tile) {
-		$tile.className = $tile.className.replace(/tile-\d-\d/, 'tile-'+move.toRow+'-'+move.toCol)
-	})
+	for(var i=0;i<$tiles.length;i++) {
+		$tiles[i].className = $tiles[i].className.replace(/tile-\d-\d/, 'tile-'+move.toRow+'-'+move.toCol)
+	}
 	
 	if ($old) {
 		setTimeout(function() {
-			_.map($tiles, function($tile) {
-				try {
-					$tile.parentElement.removeChild($tile)
-				} catch(e) {
+			try {
+				for(var i=0;i<$tiles.length;i++) {
+						$tiles[i].parentElement.removeChild($tiles[i])
 				}
-			})
+			} catch(e) {
+			}
 		}, 1000)
 	}
 })
@@ -37,9 +37,9 @@ var maxColor = 1
 Events.on('setColor', function(elem) {
 	var $tiles = $('.tile-'+elem.row+'-'+elem.col)
 	try {
-		_.map($tiles, function($tile) {
-			$tile.className = $tile.className.replace(/tile-phase-\d/, 'tile-phase-'+(elem.color-1))
-		})
+		for(var i=0;i<$tiles.length;i++) {
+			$tiles[i].className = $tiles[i].className.replace(/tile-phase-\d/, 'tile-phase-'+(elem.color-1))
+		}
 
 		if (elem.color > maxColor) {
 			maxColor = elem.color
