@@ -389,7 +389,7 @@ button:active:after {
 /* tutorial */
 #tip {
 	position: absolute;
-	z-index: 2;
+	z-index: 15;
 	width: 200px;
 	min-height: 30px;
 	background: #fff;
