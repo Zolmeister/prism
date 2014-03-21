@@ -63,8 +63,8 @@ function Board(grid) {
 	this.lastVisited = []
 		
 	this.hasAnotherMove = function() {
-		for(var r=0;r<this.grid.length;r++) {
-			for(var c=0;c<this.grid[0].length;c++) {
+		for(var r=0;r<4;r++) {
+			for(var c=0;c<4;c++) {
 				if (!this.grid[r][c]) {
 					return true
 				}
@@ -129,8 +129,8 @@ function Board(grid) {
 		
 		// get random empty grid cell that didn't have any blocks last time
 		var emptyCells = []
-		for(var r=0;r<this.grid.length;r++) {
-			for(var c=0;c<this.grid[0].length;c++) {
+		for(var r=0;r<4;r++) {
+			for(var c=0;c<4;c++) {
 				if(!this.grid[r][c]) {
 					emptyCells.push([r,c])
 				}
@@ -197,8 +197,8 @@ function Board(grid) {
 		this.lastVisited = []
 		
 		// Hack, is something has been combined, it has 0.1 added to it temporarily
-		for(var r=0;r<rows.length;r++) {
-			for(var c=0;c<cols.length;c++) {
+		for(var r=0;r<4;r++) {
+			for(var c=0;c<4;c++) {
 				var row = rows[r]
 				var col = cols[c]
 				
@@ -232,9 +232,11 @@ function Board(grid) {
 			}
 		}
 		
-		this.grid = _.map(grid, function(row) {
-			return _.map(row, Math.floor.bind(Math))
-		})
+		for(var r=0;r<4;r++) {
+			for(var c=0;c<4;c++) {
+				this.grid[r][c] = Math.floor(this.grid[r][c])
+			}
+		}
 	}
 }
 
@@ -255,18 +257,18 @@ Events.on('move', function(move) {
 	if (move.fromRow === move.toRow && move.fromCol === move.toCol) return;
 	var $tiles = $('.tile-'+move.fromRow+'-'+move.fromCol)
 	var $old = $('.tile-'+move.toRow+'-'+move.toCol)[0]
-	_.map($tiles, function($tile) {
-		$tile.className = $tile.className.replace(/tile-\d-\d/, 'tile-'+move.toRow+'-'+move.toCol)
-	})
+	for(var i=0;i<$tiles.length;i++) {
+		$tiles[i].className = $tiles[i].className.replace(/tile-\d-\d/, 'tile-'+move.toRow+'-'+move.toCol)
+	}
 	
 	if ($old) {
 		setTimeout(function() {
-			_.map($tiles, function($tile) {
-				try {
-					$tile.parentElement.removeChild($tile)
-				} catch(e) {
+			try {
+				for(var i=0;i<$tiles.length;i++) {
+						$tiles[i].parentElement.removeChild($tiles[i])
 				}
-			})
+			} catch(e) {
+			}
 		}, 1000)
 	}
 })
@@ -283,9 +285,9 @@ var maxColor = 1
 Events.on('setColor', function(elem) {
 	var $tiles = $('.tile-'+elem.row+'-'+elem.col)
 	try {
-		_.map($tiles, function($tile) {
-			$tile.className = $tile.className.replace(/tile-phase-\d/, 'tile-phase-'+(elem.color-1))
-		})
+		for(var i=0;i<$tiles.length;i++) {
+			$tiles[i].className = $tiles[i].className.replace(/tile-phase-\d/, 'tile-phase-'+(elem.color-1))
+		}
 
 		if (elem.color > maxColor) {
 			maxColor = elem.color
@@ -299,34 +301,34 @@ Events.on('setColor', function(elem) {
 var gameOverOnce = false
 Events.on('gameOver', function() {
 	maxColor = 0
-	var infoScreen = document.getElementById('info-screen')
-	infoScreen.className = 'show'
-	var gameOverBox = document.getElementById('game-over-box')
-	gameOverBox.style.display = 'block'
+	var $infoScreen = document.getElementById('info-screen')
+	$infoScreen.className = 'show'
+	var $gameOverBox = document.getElementById('game-over-box')
+	$gameOverBox.style.display = 'block'
 	
-	var challengeButton = document.createElement('button')
-	challengeButton.innerText = 'Challenge a Friend'
+	var $challengeButton = document.createElement('button')
+	$challengeButton.innerText = 'Challenge a Friend'
 	// Should add some sort of fastclick here... (touch first)
-	challengeButton.addEventListener('click', function() {
+	$challengeButton.addEventListener('click', function() {
 		Events.emit('challengeFriend')
 	})
 	
 	// move the score element inside this div, we move back to it's original spot when a new game is started
-	var scoreWrapperEle = $('.bubble-wrapper')[0]
-	if(scoreWrapperEle)
-		gameOverBox.appendChild(scoreWrapperEle)
+	var $scoreWrapperEle = $('.bubble-wrapper')[0]
+	if($scoreWrapperEle)
+		$gameOverBox.appendChild($scoreWrapperEle)
 	
 	if (!gameOverOnce) {
-		var gameOverButton = document.createElement('button')
-		gameOverButton.innerText = 'Play Again'
-		gameOverButton.className = 'play-again'
+		var $gameOverButton = document.createElement('button')
+		$gameOverButton.innerText = 'Play Again'
+		$gameOverButton.className = 'play-again'
 		// Should add some sort of fastclick here... (touch first)
-		gameOverButton.addEventListener('click', function() {
+		$gameOverButton.addEventListener('click', function() {
 			Events.emit('restartGame')
 		})
 		
-		gameOverBox.appendChild(challengeButton)
-		gameOverBox.appendChild(gameOverButton)
+		$gameOverBox.appendChild($challengeButton)
+		$gameOverBox.appendChild($gameOverButton)
 		gameOverOnce = true
 	}
 })
@@ -349,14 +351,14 @@ Events.on('restartGame', function() {
 	document.getElementById('progress-cover').className = 'progress-0'
 	document.getElementById('info-screen').className = 'hide'
 	// move the score element back to where it was before
-	if(scoreWrapperEle = $('.bubble-wrapper')[0])
-		document.body.appendChild(scoreWrapperEle)
+	if($scoreWrapperEle = $('.bubble-wrapper')[0])
+		document.body.appendChild($scoreWrapperEle)
 	GAME.board.newGame()
 })
 
-scoreEle = $('#score')[0]
+$scoreEle = $('#score')[0]
 Events.on('score', function(score) {
-	scoreEle.innerHTML = score;
+	$scoreEle.innerHTML = score;
 })
 
 // keybindings
@@ -404,18 +406,18 @@ if(!localStorage['tutorial-shown']) {
 window.addEventListener('load', function() {
 	// Load in sharing buttons
 	if(cards.kik) {
-		var share = document.createElement('a')
-		share.className = 'kik-share' 
-		share.href = '#'
-		share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
-		share.addEventListener('touchstart', function() {
+		var $share = document.createElement('a')
+		$share.className = 'kik-share' 
+		$share.href = '#'
+		$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
+		$share.addEventListener('touchstart', function() {
 			Clay.Kik.post({
 				message: 'Come play Prism, the most addicting game on Kik!',
 				title: 'Prism',
 				data: {}
 			})
 		})
-		document.getElementById('share').appendChild(share)
+		document.getElementById('share').appendChild($share)
 	}
 	else {
 		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
