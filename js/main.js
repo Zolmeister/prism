@@ -60,7 +60,7 @@ Events.on('gameOver', function() {
 	$gameOverBox.style.display = 'block'
 	
 	var $challengeButton = document.createElement('button')
-	$challengeButton.innerText = 'Challenge a Friend'
+	$challengeButton.innerHTML = 'Challenge a Friend'
 	// Should add some sort of fastclick here... (touch first)
 	$challengeButton.addEventListener('click', function() {
 		Events.emit('challengeFriend')
@@ -77,7 +77,7 @@ Events.on('gameOver', function() {
 	
 	if (!gameOverOnce) {
 		var $gameOverButton = document.createElement('button')
-		$gameOverButton.innerText = 'Play Again'
+		$gameOverButton.innerHTML = 'Play Again'
 		$gameOverButton.className = 'play-again'
 		// Should add some sort of fastclick here... (touch first)
 		$gameOverButton.addEventListener('click', function() {
@@ -156,7 +156,24 @@ Hammer(window, {
 })
 
 Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
-	GAME.board.move(e.keyIdentifier.toLowerCase())
+	var key = e.keyIdentifier
+	if(!key) { // firefox
+		switch(e.which) {
+			case 40:
+				key = 'Down';
+				break;
+			case 39:
+				key = 'Right';
+				break;
+			case 37:
+				key = 'Left';
+				break;
+			case 38:
+				key = 'Up';
+				break;
+		}
+	}
+	GAME.board.move(key.toLowerCase())
 });
 
 // init

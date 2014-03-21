@@ -31,6 +31,7 @@ body {
 	border: #ac9191;
 	top: 46px;
 	position: relative;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	height: 38px;
@@ -198,6 +199,7 @@ button:active:after {
 	left: 0;
 	padding: 100px 3% 50px 3%; /* change js in sizing() if 3% is changed */
 	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 .grid-inner {
@@ -220,6 +222,7 @@ button:active:after {
 .grid-row {
 	height: 25%;
 	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 .grid-cell {
@@ -228,6 +231,7 @@ button:active:after {
 	height: 100%;
 	float: left;
 	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -245,6 +249,7 @@ button:active:after {
 	width: 25%;
 	height: 25%;
 	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	-webkit-animation: spawnTile 0.5s;
 	animation: spawnTile 0.5s;
@@ -266,6 +271,7 @@ button:active:after {
 	border: 5px solid rgba(0, 0, 0, 0.1);
 	border-radius: 10px;
 	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 .tile-phase-0 .tile-inner {
