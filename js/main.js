@@ -68,8 +68,10 @@ Events.on('gameOver', function() {
 	
 	// move the score element inside this div, we move back to it's original spot when a new game is started
 	var $scoreWrapperEle = $('.bubble-wrapper')[0]
-	if($scoreWrapperEle)
+	if($scoreWrapperEle) {
+		$scoreWrapperEle.style.zIndex = 10 // show above game over box. we want it below the tutorial tips at start though
 		$gameOverBox.appendChild($scoreWrapperEle)
+	}
 	
 	var $shareBubble = $('.share-bubble')[0]
 	if($shareBubble)
@@ -156,6 +158,7 @@ Hammer(window, {
 })
 
 Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
+	e.preventDefault()
 	var key = e.keyIdentifier
 	if(!key) { // firefox
 		switch(e.which) {
@@ -191,6 +194,9 @@ if(!localStorage['tutorial-shown']) {
 window.addEventListener('load', function() {
 	// Load in sharing buttons
 	if(cards.kik) {
+		kik.metrics.enableGoogleAnalytics() // track messages sent
+		var $brand = $('.brand')[0]
+		$brand.style.display = 'none'
 		var $share = document.createElement('a')
 		$share.className = 'kik-share' 
 		$share.href = '#'

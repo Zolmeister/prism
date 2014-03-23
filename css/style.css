@@ -17,10 +17,14 @@ body {
 	user-select: none;
 }
 
+a {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 .bubble-wrapper {
 	text-align: center;
 	position: relative;
-	z-index: 10;
+	z-index: 3;
 }
 .bubble {
 	padding: 10px;
@@ -400,7 +404,7 @@ button:active:after {
 /* tutorial */
 #tip {
 	position: absolute;
-	z-index: 15;
+	z-index: 4;
 	width: 200px;
 	min-height: 30px;
 	background: #fff;
