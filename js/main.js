@@ -192,6 +192,29 @@ if(!localStorage['tutorial-shown']) {
 }
 
 window.addEventListener('load', function() {
+	// Load clay API
+	window.Clay = window.Clay || {};
+	Clay.gameKey = "prism";
+	Clay.readyFunctions = [];
+	Clay.ready = function( fn ) {
+		Clay.readyFunctions.push( fn );
+	};
+	( function() {
+		var clay = document.createElement("script"); clay.async = true;
+		//clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js"; 
+		clay.src = "http://cdn.clay.io/api.js"; 
+		var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
+	} )();
+	
+	// Load GA
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-27992080-1', 'clay.io');
+	ga('send', 'pageview');
+	
 	// Load in sharing buttons
 	if(cards.kik) {
 		kik.metrics.enableGoogleAnalytics() // track messages sent
@@ -215,6 +238,15 @@ window.addEventListener('load', function() {
 		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
 		html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
 		document.getElementById('share').innerHTML = html
+		
+		var html = ''
+		html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
+		html += "<div>"
+		html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
+		html += "	&middot; <a href='http://clay.io/jobs' target='_blank'>We're hiring</a>"
+		html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
+		html += "</div>"
+		document.getElementById('brand').innerHTML = html
 	}
 })
 
