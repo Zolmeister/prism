@@ -75,7 +75,7 @@ module.exports = function (grunt) {
 		usebanner: {
 			dist: {
 				options: {
-					position: 'top',
+					position: 'bottom',
 					banner: '#<%= Date.now() %>'
 				},
 				files: {
