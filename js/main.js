@@ -53,8 +53,10 @@ Events.on('setColor', function(elem) {
 // super hack to prevent multiple buttons spawning end of game
 var gameOverOnce = false
 var postedScore = false
+var postingScore = false
 Events.on('gameOver', function() {
 	postedScore = false
+	postingScore = false
 	maxColor = 0
 	var $infoScreen = document.getElementById('info-screen')
 	$infoScreen.className = 'show'
@@ -80,7 +82,7 @@ Events.on('gameOver', function() {
 		$shareBubble.style.display = 'none'
 	
 	Events.on('showHighScores', function() {
-		GAME.leaderboard.show();
+		GAME.leaderboard.show({}, function() { postingScore = false });
 	})
 		
 	if (!gameOverOnce) {
@@ -95,19 +97,21 @@ Events.on('gameOver', function() {
 		$gameOverBox.appendChild($challengeButton)
 		$gameOverBox.appendChild($gameOverButton)
 		
-		if (GAME.leaderboard) {
+		if (false && GAME.leaderboard) {
 			var $leaderboardButton = document.createElement('button')
 			$leaderboardButton.innerHTML = 'Leaderboard'
 			$leaderboardButton.className = 'leaderboard-button'
 			
 			// Should add some sort of fastclick here... (touch first)
 			$leaderboardButton.addEventListener('click', function() {
-				if(GAME.leaderboard) {
+				if (GAME.leaderboard && !postingScore) {
+					postingScore = true // set to false in showHighScores event
 					if (!postedScore) {
-						console.log('POSTING', GAME.board.score)
+						$leaderboardButton.innerHTML = 'Posting...'
 						GAME.leaderboard.post({
 							score: GAME.board.score
 						}, function() {
+							$leaderboardButton.innerHTML = 'Leaderboard'
 							postedScore = true
 							Events.emit('showHighScores')
 						})
@@ -237,6 +241,7 @@ window.addEventListener('load', function() {
 		var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
 	} )();
 	
+	
 	// Load GA
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -249,6 +254,15 @@ window.addEventListener('load', function() {
 	// high score
 	Clay.ready(function() {
 		console.log('Clay loaded')
+		
+		// Detect old android and toss a class on <body> to use less animations
+		if(Clay.Environment.os == 'android' && Clay.Environment.version < 3) {
+			document.body.className = 'slow'
+			// webkit-clip: text doesn't work on older android, so the logo, etc.. looks screwy. Just hide those suckers
+			document.getElementById('game-over-text').style.display = 'none'
+			document.getElementById('logo-text').style.display = 'none'
+		}
+		
 		if(navigator.onLine)
 			GAME.leaderboard = new Clay.Leaderboard({id: 3487})
 	})
@@ -266,6 +280,7 @@ window.addEventListener('load', function() {
 		kik.metrics.enableGoogleAnalytics() // track messages sent
 		var $brand = $('.brand')[0]
 		$brand.style.display = 'none'
+		
 		var $share = document.createElement('a')
 		$share.className = 'kik-share' 
 		$share.href = '#'
@@ -295,6 +310,13 @@ window.addEventListener('load', function() {
 	}
 })
 
+// lock in portrait on Kik (or else game over buttons get cutoff. Can fix with media query, but putting off)
+if( typeof cards !== 'undefined' && cards.ready ) {
+	cards.ready(function() {
+		if(cards.browser)
+			cards.browser.setOrientationLock('portrait')
+	})
+}
 
 function sizing() {
 	var gridWidth = window.innerWidth

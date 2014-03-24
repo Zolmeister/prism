@@ -144,6 +144,7 @@ a {
 	font-size: 5em;
 	margin: 0.125em 0;
 	display: inline-block;
+	background: -webkit-gradient(linear, left top, right top, color-stop(0.125, #78c5d5), color-stop(0.125, #78c5d5), color-stop(0.125, #459ba8), color-stop(0.25, #459ba8), color-stop(0.25, #79c268), color-stop(0.375, #79c268), color-stop(0.375, #c5d747), color-stop(0.5, #c5d747), color-stop(0.5, #f5d63d), color-stop(0.625, #f5d63d), color-stop(0.625, #f18c32), color-stop(0.75, #f18c32), color-stop(0.75, #e868a1), color-stop(0.875, #e868a1), color-stop(1, #bf63a6));
 	background: -webkit-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;	
@@ -258,6 +259,11 @@ button:active:after {
 	-webkit-animation: spawnTile 0.5s;
 	animation: spawnTile 0.5s;
 }
+.slow .tile { /* less animation on slower devices */
+	-webkit-animation: none;
+	animation: none;
+	border: 1px solid #777;
+}
 .tile-inner {
 	transition: background-color 1s;
 	-webkit-transition: background-color 1s;
@@ -266,6 +272,10 @@ button:active:after {
 	height: 100%;
 	-webkit-transform: scale(0.85); /* alternatively can do padding on parent ele, but when we scale up/down it doesn't fit the full space */
 	border-radius: 10px;
+}
+.slow .tile-inner { /* less animation on slower devices */
+	-webkit-transform: none;
+	border-radius: 0;
 }
 .tile-inner:after {
 	position: absolute;
@@ -277,6 +287,11 @@ button:active:after {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+.slow .tile-inner:after { /* less animation on slower devices */
+	border-radius: 0;
+	border: none;
+	display: none;
 }
 .tile-phase-0 .tile-inner {
 	background: #ddd;
@@ -331,11 +346,20 @@ button:active:after {
 	z-index: 9;
 }
 .tile-phase-9 .tile-inner {
+	background: -webkit-gradient(linear, left top, right top, color-stop(0.125, #78c5d5), color-stop(0.125, #78c5d5), color-stop(0.125, #459ba8), color-stop(0.25, #459ba8), color-stop(0.25, #79c268), color-stop(0.375, #79c268), color-stop(0.375, #c5d747), color-stop(0.5, #c5d747), color-stop(0.5, #f5d63d), color-stop(0.625, #f5d63d), color-stop(0.625, #f18c32), color-stop(0.75, #f18c32), color-stop(0.75, #e868a1), color-stop(0.875, #e868a1), color-stop(1, #bf63a6));
 	background: -webkit-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
+	background: -ms-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
+	background: -moz-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
+	background: linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
 	-webkit-animation: mergeAnimation9 0.5s;
 	animation: mergeAnimation9 0.5s;
 	z-index: 10;
 }
+.slow .tile-inner { /* less animation on slower devices */
+	-webkit-animation: none !important;
+	animation: none !important;
+}
+
 .tile-0-0 {
 	top: 0;
 	left: 0;
