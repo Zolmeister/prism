@@ -289,7 +289,6 @@ window.addEventListener('load', function() {
 		html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
 		html += "<div>"
 		html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
-		html += "	&middot; <a href='http://clay.io/jobs' target='_blank'>We're hiring</a>"
 		html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
 		html += "</div>"
 		document.getElementById('brand').innerHTML = html
