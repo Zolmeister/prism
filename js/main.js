@@ -179,6 +179,17 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 	GAME.board.move(key.toLowerCase())
 });
 
+if (typeof kik !== 'undefined') {
+    kik.browser.back(function() {
+        if (GAME.board.isGameOver) {
+            Events.emit('restartGame')
+            return false
+        }
+        return true
+    });  
+}
+
+
 // init
 // Run the tutorial for first-time visitors
 if(!localStorage['tutorial-shown']) {
