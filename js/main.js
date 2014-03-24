@@ -52,7 +52,9 @@ Events.on('setColor', function(elem) {
 
 // super hack to prevent multiple buttons spawning end of game
 var gameOverOnce = false
+var postedScore = false
 Events.on('gameOver', function() {
+	postedScore = false
 	maxColor = 0
 	var $infoScreen = document.getElementById('info-screen')
 	$infoScreen.className = 'show'
@@ -78,7 +80,7 @@ Events.on('gameOver', function() {
 		$shareBubble.style.display = 'none'
 	
 	Events.on('showHighScores', function() {
-		
+		GAME.leaderboard.show();
 	})
 		
 	if (!gameOverOnce) {
@@ -100,7 +102,19 @@ Events.on('gameOver', function() {
 			
 			// Should add some sort of fastclick here... (touch first)
 			$leaderboardButton.addEventListener('click', function() {
-				Events.emit('showHighScores')
+				if(GAME.leaderboard) {
+					if (!postedScore) {
+						console.log('POSTING', GAME.board.score)
+						GAME.leaderboard.post({
+							score: GAME.board.score
+						}, function() {
+							postedScore = true
+							Events.emit('showHighScores')
+						})
+					} else {
+						Events.emit('showHighScores')
+					}
+				}
 			})
 			$gameOverBox.appendChild($leaderboardButton)
 		}
@@ -233,15 +247,18 @@ window.addEventListener('load', function() {
 	ga('send', 'pageview');
 	
 	// high score
-	if(typeof Clay !== 'undefined' && navigator.onLine)
-		GAME.leaderboard = new Clay.Leaderboard({id: 1});
+	Clay.ready(function() {
+		console.log('Clay loaded')
+		if(navigator.onLine)
+			GAME.leaderboard = new Clay.Leaderboard({id: 3487})
+	})
 	
 	// Load in sharing buttons
 	if(typeof cards.kik !== 'undefined') {
 		kik.browser.back(function() {
 		  if (GAME.board.isGameOver) {
-			Events.emit('restartGame')
-			return false
+				Events.emit('restartGame')
+				return false
 		  }
 		  return true
 		})
