@@ -15,7 +15,7 @@ module.exports = function (grunt) {
 		watch: {
 			scripts: {
 				files: ['js/**/*.js', 'lib/**/*.js'],
-				tasks: ['concat_sourcemap', 'cssmin', 'uglify', 'inlineEverything', 'compress'],
+				tasks: ['concat_sourcemap', 'cssmin', 'uglify', 'inlineEverything', 'compress', 'copy:main', 'usebanner', 'copy:build'],
 				options: {
 					spawn: false,
 				},
@@ -71,16 +71,41 @@ module.exports = function (grunt) {
 				src: ['index.html'],
 				dest: 'build/'
 			}
+		},
+		usebanner: {
+			dist: {
+				options: {
+					position: 'top',
+					banner: '#<%= Date.now() %>'
+				},
+				files: {
+					src: [ 'cache.appcache' ]
+				}
+			}
+		},
+		copy: {
+			main: {
+				files: [
+					{src: ['cache.appcache.tpl'], dest: 'cache.appcache'}
+				]
+			},
+			build: {
+				files: [
+					{src: ['cache.appcache'], dest: 'build/cache.appcache'}
+				]
+			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-cruncher');
+	grunt.loadNpmTasks('grunt-banner');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-concat-sourcemap');
 	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
-	grunt.registerTask('default', ['concat_sourcemap', 'cssmin', 'uglify', 'inlineEverything', 'compress', 'watch']);
+	grunt.registerTask('default', ['concat_sourcemap', 'cssmin', 'uglify', 'inlineEverything', 'compress', 'copy:main', 'usebanner', 'copy:build', 'watch']);
 
 };
