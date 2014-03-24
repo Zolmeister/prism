@@ -179,17 +179,6 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 	GAME.board.move(key.toLowerCase())
 });
 
-if (typeof kik !== 'undefined') {
-    kik.browser.back(function() {
-        if (GAME.board.isGameOver) {
-            Events.emit('restartGame')
-            return false
-        }
-        return true
-    });  
-}
-
-
 // init
 // Run the tutorial for first-time visitors
 if(!localStorage['tutorial-shown']) {
@@ -228,6 +217,14 @@ window.addEventListener('load', function() {
 	
 	// Load in sharing buttons
 	if(cards.kik) {
+		kik.browser.back(function() {
+		  if (GAME.board.isGameOver) {
+			Events.emit('restartGame')
+			return false
+		  }
+		  return true
+		})
+	  
 		kik.metrics.enableGoogleAnalytics() // track messages sent
 		var $brand = $('.brand')[0]
 		$brand.style.display = 'none'
