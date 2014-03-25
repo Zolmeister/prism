@@ -93,6 +93,7 @@ function Board(grid) {
 
 		this.lastVisited.push([row, col])
 		this.grid[row][col] = color
+		localStorage['grid'] = JSON.stringify(this.grid) // persistence
 		
 		// add element to DOM
 		Events.emit('spawn', {row: row, col: col, color: color})
@@ -212,6 +213,7 @@ function Board(grid) {
 				this.grid[r][c] = Math.floor(this.grid[r][c])
 			}
 		}
+		localStorage['score'] = this.score
 	}
 }
 

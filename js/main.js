@@ -130,6 +130,10 @@ Events.on('gameOver', function() {
 	var $scoreWrapperEle = $('.bubble-wrapper')[0]
 	if($scoreWrapperEle)
 		$gameOverBox.appendChild($scoreWrapperEle)
+		
+	// Reset saved game
+	delete localStorage['grid']
+	delete localStorage['score']
 })
 
 Events.on('challengeFriend', function() {
@@ -216,17 +220,30 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 
 // init
 // Run the tutorial for first-time visitors
-if(!localStorage['tutorial-shown']) {
+if (!localStorage['tutorial-shown']) {
 	
 	// row, col, color
 	GAME.board.newGame([[2,1,1],[2,2,1]])
 	GAME.tutorial = new Tutorial([2, 1])
 	localStorage['tutorial-shown'] = 1
+} else if (localStorage['grid']) { // for persistence
+	var grid = JSON.parse(localStorage['grid'])
+	var startingPositions = []
+	for(var r=0;r<4;r++) {
+		for(var c=0;c<4;c++) {
+			if(grid[r][c] > 0)
+				startingPositions.push([r, c, grid[r][c]])
+		}
+	}
+	GAME.board.newGame(startingPositions)
+	GAME.board.score = parseInt(localStorage['score']) || 0
 } else {
 	GAME.board.newGame()
 }
 
 window.addEventListener('load', function() {
+	scrollTo( 0, 1 );
+	
 	// Load clay API
 	window.Clay = window.Clay || {};
 	Clay.gameKey = "prism";
