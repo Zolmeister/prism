@@ -331,7 +331,7 @@ window.addEventListener('load', function() {
 	
 	// webkit-clip: text doesn't work on older android, so the logo, etc.. looks screwy
 	var supportsWebkitBackgroundClipText = typeof $grid.style.webkitBackgroundClip !== "undefined" && ( $grid.style.webkitBackgroundClip = "text", $grid.style.webkitBackgroundClip === "text" )
-	if(supportsWebkitBackgroundClipText) {
+	if(!supportsWebkitBackgroundClipText) {
 		var gameOverText = document.getElementById('game-over-text')
 		gameOverText.style.background = 'transparent'
 		gameOverText.style.webkitTextFillColor = '#000'
