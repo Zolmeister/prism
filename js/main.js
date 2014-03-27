@@ -330,14 +330,16 @@ window.addEventListener('load', function() {
 	}
 	
 	// webkit-clip: text doesn't work on older android, so the logo, etc.. looks screwy
-	var supportsWebkitBackgroundClipText = typeof $grid.style.webkitBackgroundClip !== "undefined" && ( $grid.style.webkitBackgroundClip = "text", $grid.style.webkitBackgroundClip === "text" )
-	if(!supportsWebkitBackgroundClipText) {
-		var gameOverText = document.getElementById('game-over-text')
-		gameOverText.style.background = 'transparent'
-		gameOverText.style.webkitTextFillColor = '#000'
-		var logoText = document.getElementById('logo-text')
-		logoText.style.background = 'transparent'
-		logoText.style.webkitTextFillColor = '#000'
+	var $gameOverText = document.getElementById('game-over-text')
+	var supportsWebkitBackgroundClipText = typeof $gameOverText.style.webkitBackgroundClip !== "undefined" && ( $gameOverText.style.webkitBackgroundClip = "text", $gameOverText.style.webkitBackgroundClip === "text" )
+	var gameOverTextStyle = window.getComputedStyle($gameOverText)
+	var supportsLinearGradient = gameOverTextStyle.getPropertyValue('background').indexOf('linear-gradient') !== -1
+	if(!supportsWebkitBackgroundClipText || !supportsLinearGradient) {
+		$gameOverText.style.background = 'transparent'
+		$gameOverText.style.webkitTextFillColor = '#000'
+		var $logoText = document.getElementById('logo-text')
+		$logoText.style.background = 'transparent'
+		$logoText.style.webkitTextFillColor = '#000'
 	}
 })
 
