@@ -1,4 +1,7 @@
-var $ = document.querySelectorAll.bind(document);
+function $(selector, el) {
+	if (!el) {el = document;}
+	return el.querySelectorAll(selector);
+}
 
 var GAME = {
 	board: new Board()
