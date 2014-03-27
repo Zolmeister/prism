@@ -14,7 +14,7 @@ module.exports = function (grunt) {
 		},
 		watch: {
 			scripts: {
-				files: ['js/**/*.js', 'lib/**/*.js'],
+				files: ['js/**/*.js', 'lib/**/*.js', 'css/**/*.css'],
 				tasks: ['concat_sourcemap', 'cssmin', 'uglify', 'inlineEverything', 'compress', 'copy:main', 'usebanner', 'copy:build'],
 				options: {
 					spawn: false,
