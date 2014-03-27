@@ -60,6 +60,8 @@ Events.on('gameOver', function() {
 	maxColor = 0
 	var $infoScreen = document.getElementById('info-screen')
 	$infoScreen.className = 'show'
+	$infoScreen.style.display = 'table'
+	
 	var $gameOverBox = document.getElementById('game-over-box')
 	$gameOverBox.style.display = 'block'
 	
@@ -153,6 +155,7 @@ Events.on('restartGame', function() {
 	$('.grid')[0].innerHTML = ''
 	document.getElementById('progress-cover').className = 'progress-0'
 	document.getElementById('info-screen').className = 'hide'
+	
 	// move the score element back to where it was before
 	var $scoreWrapperEle = $('.bubble-wrapper')[0]
 	if($scoreWrapperEle)

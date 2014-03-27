@@ -136,6 +136,10 @@ a {
 	-webkit-transition: opacity: 0.5s;
 	transition: opacity: 0.5s;
 }
+.hide {
+	visibility: hidden;
+	opacity: 0;
+}
 .info {
 	display: table-cell;
 	vertical-align: middle;
