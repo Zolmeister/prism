@@ -75,7 +75,7 @@ a {
 	background: linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
 	width: 100%;
 	height: 5px;
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
 }
@@ -118,7 +118,7 @@ a {
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
-	position: fixed;
+	position: absolute;
 	z-index: 5;
 	top: 0;
 	left: 0;
@@ -481,7 +481,7 @@ button:active:after {
 }
 
 .brand {
-	position: fixed;
+	position: absolute;
 	bottom: 10px;
 	width: 100%;
 	text-align: center;
