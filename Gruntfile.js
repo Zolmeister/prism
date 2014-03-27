@@ -7,7 +7,7 @@ module.exports = function (grunt) {
 			},
 			target: {
 				files: {
-					'dist/prism.js': ['js/**/*.js'],
+					'dist/prism.js': ['js/bind.js', 'js/board.js', 'js/events.js', 'js/main.js', 'js/tutorial.js'],
 					'dist/lib.js': ['lib/**/*.js']
 				}
 			}

@@ -262,7 +262,7 @@ button:active:after {
 .slow .tile { /* less animation on slower devices */
 	-webkit-animation: none;
 	animation: none;
-	border: 1px solid #777;
+	padding: 3%;
 }
 .tile-inner {
 	transition: background-color 1s;
@@ -276,6 +276,7 @@ button:active:after {
 .slow .tile-inner { /* less animation on slower devices */
 	-webkit-transform: none;
 	border-radius: 0;
+	border: 1px solid #aaa;
 }
 .tile-inner:after {
 	position: absolute;

@@ -237,6 +237,7 @@ if (!localStorage['tutorial-shown']) {
 	}
 	GAME.board.newGame(startingPositions)
 	GAME.board.score = parseInt(localStorage['score']) || 0
+	Events.emit('score', GAME.board.score)
 } else {
 	GAME.board.newGame()
 }
@@ -275,9 +276,6 @@ window.addEventListener('load', function() {
 		// Detect old android and toss a class on <body> to use less animations
 		if(Clay.Environment.os == 'android' && Clay.Environment.version < 3) {
 			document.body.className = 'slow'
-			// webkit-clip: text doesn't work on older android, so the logo, etc.. looks screwy. Just hide those suckers
-			document.getElementById('game-over-text').style.display = 'none'
-			document.getElementById('logo-text').style.display = 'none'
 		}
 		
 		if(navigator.onLine)
@@ -298,19 +296,21 @@ window.addEventListener('load', function() {
 		var $brand = $('.brand')[0]
 		$brand.style.display = 'none'
 		
+		var $shareBubble = document.getElementById('share')
+		
 		var $share = document.createElement('a')
 		$share.className = 'kik-share' 
 		$share.href = '#'
 		$share.id = 'kik-share'
 		$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
-		$share.addEventListener('touchstart', function() {
+		$shareBubble.addEventListener('touchstart', function() {
 			Clay.Kik.post({
 				message: 'Come play Prism, the most addicting game on Kik!',
 				title: 'Prism',
 				data: {}
 			})
 		})
-		document.getElementById('share').appendChild($share)
+		$shareBubble.appendChild($share)
 	}
 	else {
 		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
@@ -324,6 +324,17 @@ window.addEventListener('load', function() {
 		html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
 		html += "</div>"
 		document.getElementById('brand').innerHTML = html
+	}
+	
+	// webkit-clip: text doesn't work on older android, so the logo, etc.. looks screwy
+	var supportsWebkitBackgroundClipText = typeof $grid.style.webkitBackgroundClip !== "undefined" && ( $grid.style.webkitBackgroundClip = "text", $grid.style.webkitBackgroundClip === "text" )
+	if(supportsWebkitBackgroundClipText) {
+		var gameOverText = document.getElementById('game-over-text')
+		gameOverText.style.background = 'transparent'
+		gameOverText.style.webkitTextFillColor = '#000'
+		var logoText = document.getElementById('logo-text')
+		logoText.style.background = 'transparent'
+		logoText.style.webkitTextFillColor = '#000'
 	}
 })
 
