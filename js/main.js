@@ -102,7 +102,7 @@ Events.on('gameOver', function() {
 		$gameOverBox.appendChild($challengeButton)
 		$gameOverBox.appendChild($gameOverButton)
 		
-		if (false && GAME.leaderboard) {
+		if (GAME.leaderboard) {
 			var $leaderboardButton = document.createElement('button')
 			$leaderboardButton.innerHTML = 'Leaderboard'
 			$leaderboardButton.className = 'leaderboard-button'
@@ -262,6 +262,7 @@ window.addEventListener('load', function() {
 		var clay = document.createElement("script"); clay.async = true;
 		//clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js"; 
 		clay.src = "http://cdn.clay.io/api.js"; 
+		//clay.src = "http://clay.io/api/src/bundle.js"; 
 		var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
 	} )();
 	
