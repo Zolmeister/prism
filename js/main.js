@@ -4,7 +4,14 @@ function $(selector, el) {
 }
 
 var GAME = {
-	board: new Board()
+	board: new Board(),
+	share: function() {
+		Clay.Kik.post({
+			message: 'Come play Prism, the most addicting game on Kik!',
+			title: 'Prism',
+			data: {}
+		})
+	}
 }
 
 var $grid = $('.grid')[0]
@@ -280,6 +287,8 @@ window.addEventListener('load', function() {
 	Clay.ready(function() {
 		console.log('Clay loaded')
 		
+		Clay.UI.Menu.init( { items: [{ title: 'Share This', handler: GAME.share }] } )
+		
 		// Detect old android and toss a class on <body> to use less animations
 		if(Clay.Environment.os == 'android' && Clay.Environment.version < 3) {
 			document.body.className = 'slow'
@@ -310,13 +319,7 @@ window.addEventListener('load', function() {
 		$share.href = '#'
 		$share.id = 'kik-share'
 		$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
-		$shareBubble.addEventListener('touchstart', function() {
-			Clay.Kik.post({
-				message: 'Come play Prism, the most addicting game on Kik!',
-				title: 'Prism',
-				data: {}
-			})
-		})
+		$shareBubble.addEventListener('touchstart', GAME.share)
 		$shareBubble.appendChild($share)
 	}
 	else {
