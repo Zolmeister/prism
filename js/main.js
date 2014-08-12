@@ -22,7 +22,7 @@ Events.on('move', function(move) {
 	for(var i=0;i<$tiles.length;i++) {
 		$tiles[i].className = $tiles[i].className.replace(/tile-\d-\d/, 'tile-'+move.toRow+'-'+move.toCol)
 	}
-	
+
 	if ($old) {
 		setTimeout(function() {
 			try {
@@ -71,32 +71,32 @@ Events.on('gameOver', function() {
 	var $infoScreen = document.getElementById('info-screen')
 	$infoScreen.className = 'show'
 	$infoScreen.style.display = 'table'
-	
+
 	var $gameOverBox = document.getElementById('game-over-box')
 	$gameOverBox.style.display = 'block'
-	
+
 	var $challengeButton = document.createElement('button')
 	$challengeButton.innerHTML = 'Challenge a Friend'
 	// Should add some sort of fastclick here... (touch first)
 	$challengeButton.addEventListener('click', function() {
 		Events.emit('challengeFriend')
 	})
-	
+
 	// move the score element inside this div, we move back to it's original spot when a new game is started
 	var $scoreWrapperEle = $('.bubble-wrapper')[0]
 	if($scoreWrapperEle) {
 		$scoreWrapperEle.style.zIndex = 10 // show above game over box. we want it below the tutorial tips at start though
 		$gameOverBox.appendChild($scoreWrapperEle)
 	}
-	
+
 	var $shareBubble = $('.share-bubble')[0]
 	if($shareBubble)
 		$shareBubble.style.display = 'none'
-	
+
 	Events.on('showHighScores', function() {
 		GAME.leaderboard.show({}, function() { postingScore = false });
 	})
-		
+
 	if (!gameOverOnce) {
 		var $gameOverButton = document.createElement('button')
 		$gameOverButton.innerHTML = 'Play Again'
@@ -105,15 +105,15 @@ Events.on('gameOver', function() {
 		$gameOverButton.addEventListener('click', function() {
 			Events.emit('restartGame')
 		})
-		
+
 		$gameOverBox.appendChild($challengeButton)
 		$gameOverBox.appendChild($gameOverButton)
-		
+
 		if (GAME.leaderboard) {
 			var $leaderboardButton = document.createElement('button')
 			$leaderboardButton.innerHTML = 'Leaderboard'
 			$leaderboardButton.className = 'leaderboard-button'
-			
+
 			// Should add some sort of fastclick here... (touch first)
 			$leaderboardButton.addEventListener('click', function() {
 				if (GAME.leaderboard && !postingScore) {
@@ -134,15 +134,15 @@ Events.on('gameOver', function() {
 			})
 			$gameOverBox.appendChild($leaderboardButton)
 		}
-		
+
 		gameOverOnce = true
 	}
-	
+
 	// move the score element inside this div, we move back to it's original spot when a new game is started
 	var $scoreWrapperEle = $('.bubble-wrapper')[0]
 	if($scoreWrapperEle)
 		$gameOverBox.appendChild($scoreWrapperEle)
-		
+
 	// Reset saved game
 	delete localStorage['grid']
 	delete localStorage['score']
@@ -152,7 +152,7 @@ Events.on('challengeFriend', function() {
 	var score = GAME.board.score;
 	Clay.Social.smartShare({
 		message: 'I just scored ' + score + ' in Prism! Think you can beat my score?',
-		title: 'Prism', 
+		title: 'Prism',
 		link: 'http://prism.clay.io',
 		//image: screenshotURL,
 		ignoreScreenshot: true,
@@ -165,7 +165,7 @@ Events.on('restartGame', function() {
 	$('.grid')[0].innerHTML = ''
 	document.getElementById('progress-cover').className = 'progress-0'
 	document.getElementById('info-screen').className = 'hide'
-	
+
 	// move the score element back to where it was before
 	var $scoreWrapperEle = $('.bubble-wrapper')[0]
 	if($scoreWrapperEle)
@@ -174,7 +174,7 @@ Events.on('restartGame', function() {
 	var $shareBubble = $('.share-bubble')[0]
 	if($shareBubble)
 		$shareBubble.style.display = 'inline-block'
-		
+
 	GAME.board.newGame()
 })
 
@@ -186,8 +186,8 @@ Events.on('score', function(score) {
 // keybindings
 var move = 'left';
 Hammer(window, {
-	drag_min_distance:5, 
-	drag_block_horizontal:true, 
+	drag_min_distance:5,
+	drag_block_horizontal:true,
 	drag_block_vertical:true
 }).on("dragleft", function(e) {
 	e.preventDefault()
@@ -234,7 +234,7 @@ Mousetrap.bind(['up', 'down', 'left', 'right'], function(e) {
 // init
 // Run the tutorial for first-time visitors
 if (!localStorage['tutorial-shown']) {
-	
+
 	// row, col, color
 	GAME.board.newGame([[2,1,1],[2,2,1]])
 	GAME.tutorial = new Tutorial([2, 1])
@@ -258,7 +258,7 @@ if (!localStorage['tutorial-shown']) {
 // We *should* clean this up, but very low priority...
 window.addEventListener('load', function() {
 	scrollTo( 0, 1 );
-	
+
 	// Load clay API
 	window.Clay = window.Clay || {};
 	Clay.gameKey = "prism";
@@ -268,13 +268,13 @@ window.addEventListener('load', function() {
 	};
 	( function() {
 		var clay = document.createElement("script"); clay.async = true;
-		//clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js"; 
-		clay.src = "http://cdn.clay.io/api.js"; 
-		//clay.src = "http://clay.io/api/src/bundle.js"; 
+		//clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js";
+		clay.src = "http://cdn.clay.io/api.js";
+		//clay.src = "http://clay.io/api/src/bundle.js";
 		var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
 	} )();
-	
-	
+
+
 	// Load an ad
 	// Just took the coffeescript -> js from mobile.coffee... not super clean
 	var adLoaded = function(response) {
@@ -287,23 +287,23 @@ window.addEventListener('load', function() {
 		  obj = {}
 		  return
 		}
-		
+
 		ad = document.createElement('a')
 		ad.className = 'ad'
 		devicePixelRatio = window.devicePixelRatio || 1
 		image = document.createElement('img')
 		ad.href = '#'
-		
+
 		if (devicePixelRatio > 1) {
 		  image.src = obj.srcRetina
 		} else {
 		  image.src = obj.src
 		}
-		
+
 		if (typeof _gaq !== 'undefined') {
 		  _gaq.push(['_trackEvent', 'Cross Promotion 320x50', obj.href, 'Ad View']);
 		}
-		
+
 		ad.addEventListener('touchstart', function(e) {
 		  if (e) {
 		    e.preventDefault()
@@ -317,16 +317,16 @@ window.addEventListener('load', function() {
 		    return window.location.href = obj.href
 		  }
 		})
-		
+
 		image.width = 320 * devicePixelRatio
 		image.height = 50 * devicePixelRatio
 		image.style.width = '320px'
 		image.style.height = '50px'
-		
+
 		ad.appendChild(image)
 		document.body.appendChild(ad)
 	}
-	
+
 	var objToParams = function(obj) {
 	  var p, url;
 	  url = []
@@ -364,8 +364,9 @@ window.addEventListener('load', function() {
 	  }
 	}
 
-	ajax( 'http://api.clay.io:443/ad/' + Clay.gameKey, adLoaded )
-	
+	if( cards.kik )
+		ajax( 'http://api.clay.io:443/ad/' + Clay.gameKey, adLoaded )
+
 	// Load GA
 	;(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -374,22 +375,22 @@ window.addEventListener('load', function() {
 
 	ga('create', 'UA-27992080-1', 'clay.io');
 	ga('send', 'pageview');
-	
+
 	// high score
 	Clay.ready(function() {
 		console.log('Clay loaded')
-		
+
 		Clay.UI.Menu.init( { items: [{ title: 'Share This', handler: GAME.share }] } )
-		
+
 		// Detect old android and toss a class on <body> to use less animations
 		if(Clay.Environment.os == 'android' && Clay.Environment.version < 3) {
 			document.body.className = 'slow'
 		}
-		
+
 		if(navigator.onLine)
 			GAME.leaderboard = new Clay.Leaderboard({id: 3487})
 	})
-	
+
 	// Load in sharing buttons
 	if(typeof cards.kik !== 'undefined') {
 		kik.browser.back(function() {
@@ -399,15 +400,15 @@ window.addEventListener('load', function() {
 		  }
 		  return true
 		})
-	  
+
 		kik.metrics.enableGoogleAnalytics() // track messages sent
 		var $brand = $('.brand')[0]
 		$brand.style.display = 'none'
-		
+
 		var $shareBubble = document.getElementById('share')
-		
+
 		var $share = document.createElement('a')
-		$share.className = 'kik-share' 
+		$share.className = 'kik-share'
 		$share.href = '#'
 		$share.id = 'kik-share'
 		$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
@@ -418,7 +419,7 @@ window.addEventListener('load', function() {
 		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
 		html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
 		document.getElementById('share').innerHTML = html
-		
+
 		var html = ''
 		html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
 		html += "<div>"
@@ -427,7 +428,7 @@ window.addEventListener('load', function() {
 		html += "</div>"
 		document.getElementById('brand').innerHTML = html
 	}
-	
+
 	// webkit-clip: text doesn't work on older android, so the logo, etc.. looks screwy
 	var $gameOverText = document.getElementById('game-over-text')
 	var supportsWebkitBackgroundClipText = typeof $gameOverText.style.webkitBackgroundClip !== "undefined" && ( $gameOverText.style.webkitBackgroundClip = "text", $gameOverText.style.webkitBackgroundClip === "text" )
