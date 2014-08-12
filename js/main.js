@@ -255,6 +255,7 @@ if (!localStorage['tutorial-shown']) {
 	GAME.board.newGame()
 }
 
+// We *should* clean this up, but very low priority...
 window.addEventListener('load', function() {
 	scrollTo( 0, 1 );
 	
@@ -274,8 +275,99 @@ window.addEventListener('load', function() {
 	} )();
 	
 	
+	// Load an ad
+	// Just took the coffeescript -> js from mobile.coffee... not super clean
+	var adLoaded = function(response) {
+		var ad, devicePixelRatio, e, image, obj;
+
+		try {
+		  obj = JSON.parse(response);
+		} catch (_error) {
+		  e = _error
+		  obj = {}
+		  return
+		}
+		
+		ad = document.createElement('a')
+		ad.className = 'ad'
+		devicePixelRatio = window.devicePixelRatio || 1
+		image = document.createElement('img')
+		ad.href = '#'
+		
+		if (devicePixelRatio > 1) {
+		  image.src = obj.srcRetina
+		} else {
+		  image.src = obj.src
+		}
+		
+		if (typeof _gaq !== 'undefined') {
+		  _gaq.push(['_trackEvent', 'Cross Promotion 320x50', obj.href, 'Ad View']);
+		}
+		
+		ad.addEventListener('touchstart', function(e) {
+		  if (e) {
+		    e.preventDefault()
+		  }
+		  if (typeof _gaq !== 'undefined') {
+		    _gaq.push(['_trackEvent', 'Cross Promotion 320x50', obj.href, 'Ad Click'])
+		    return _gaq.push(function() {
+		      return window.location.href = obj.href
+		    })
+		  } else {
+		    return window.location.href = obj.href
+		  }
+		})
+		
+		image.width = 320 * devicePixelRatio
+		image.height = 50 * devicePixelRatio
+		image.style.width = '320px'
+		image.style.height = '50px'
+		
+		ad.appendChild(image)
+		document.body.appendChild(ad)
+	}
+	
+	var objToParams = function(obj) {
+	  var p, url;
+	  url = []
+	  for (p in obj) {
+	    if (obj.hasOwnProperty(p)) {
+	      url.push(p + "=" + encodeURIComponent(obj[p]))
+	    }
+	  }
+	  return url.join("&")
+	}
+	var ajax = function(url, options, callback) {
+	  var request, update, xhr;
+	  if (options == null) {
+	    options = {}
+	  }
+	  if (callback == null) {
+	    callback = false
+	  }
+	  if (typeof options === 'function') {
+	    callback = options
+	    options = {}
+	  }
+	  if ('withCredentials' in new XMLHttpRequest()) {
+	    request = XMLHttpRequest
+	    update = function() {
+	      if (xhr.readyState === 4) {
+	        return callback(xhr.responseText)
+	      }
+	    }
+	    xhr = new request()
+	    xhr.open("POST", url, true)
+	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+	    xhr.onreadystatechange = update
+	    return xhr.send(objToParams(options))
+	  }
+	}
+
+	ajax( 'http://api.clay.io:443/ad/' + Clay.gameKey, adLoaded )
+	
 	// Load GA
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	;(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
