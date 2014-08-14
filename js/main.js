@@ -380,7 +380,7 @@ window.addEventListener('load', function() {
 	Clay.ready(function() {
 		console.log('Clay loaded')
 
-		Clay.UI.Menu.init( { items: [{ title: 'Share This', handler: GAME.share }] } )
+		Clay.UI.Menu.init( { items: [{ title: 'Share This', handler: GAME.share, className: 'clay-share-this' }] } )
 
 		// Detect old android and toss a class on <body> to use less animations
 		if(Clay.Environment.os == 'android' && Clay.Environment.version < 3) {
