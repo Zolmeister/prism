@@ -365,7 +365,7 @@ window.addEventListener('load', function() {
 	}
 
 	if( cards.kik )
-		ajax( 'http://api.clay.io:443/ad/' + Clay.gameKey, adLoaded )
+		ajax( 'http://api.clay.io/ad/' + Clay.gameKey, adLoaded )
 
 	// Load GA
 	;(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
