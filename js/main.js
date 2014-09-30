@@ -416,7 +416,7 @@ window.addEventListener('load', function() {
 
 	// New Clay SDK
 	var Clay = window.Clay
-	Clay.init({clientId: 1, debug: true})
+	Clay.init({gameId: 1, debug: true})
 	.then(function () {
 		return Clay.client({method: 'kik.isEnabled'})
 	})
