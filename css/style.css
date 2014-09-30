@@ -275,7 +275,7 @@ button:active:after {
 	animation: spawnTile 0.5s;
 }
 .slow .tile { /* less animation on slower devices */
-	-webkit-animation: none;
+	//-webkit-animation: none;
 	animation: none;
 	padding: 3%;
 }
