@@ -67,7 +67,19 @@ a {
 	vertical-align: bottom;
 }
 
-#progress-bar {	
+.ad {
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	margin-left: -160px;
+	display: block;
+}
+
+.ad img {
+	display: block;
+}
+
+#progress-bar {
 	background: -webkit-gradient(linear, left top, right top, color-stop(0.125, #78c5d5), color-stop(0.125, #78c5d5), color-stop(0.125, #459ba8), color-stop(0.25, #459ba8), color-stop(0.25, #79c268), color-stop(0.375, #79c268), color-stop(0.375, #c5d747), color-stop(0.5, #c5d747), color-stop(0.5, #f5d63d), color-stop(0.625, #f5d63d), color-stop(0.625, #f18c32), color-stop(0.75, #f18c32), color-stop(0.75, #e868a1), color-stop(0.875, #e868a1), color-stop(1, #bf63a6));
 	background: -webkit-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
 	background: -ms-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
@@ -150,7 +162,7 @@ a {
 	display: inline-block;
 	background: -webkit-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
 	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;	
+	-webkit-text-fill-color: transparent;
 }
 .info h2 {
 	font-size: 2em;
@@ -192,7 +204,7 @@ button:active:after {
 	position: absolute;
 	left: 0;
 	top: 0;
-	pointer-events: none; 
+	pointer-events: none;
 }
 .play-again {
 	background: #459ba8;
@@ -248,7 +260,7 @@ button:active:after {
 	top: 0;
 	left: 0;
 	z-index: 1;
-	
+
 }
 .tile {
 	transition: all 0.2s;
@@ -263,7 +275,7 @@ button:active:after {
 	animation: spawnTile 0.5s;
 }
 .slow .tile { /* less animation on slower devices */
-	-webkit-animation: none;
+	//-webkit-animation: none;
 	animation: none;
 	padding: 3%;
 }
@@ -579,7 +591,7 @@ button:active:after {
 	25%	{ opacity: 1; }
 	75%	{ opacity: 1; }
 	100% { opacity: 0; }
-	
+
 }
 @keyframes showTitle
 {
