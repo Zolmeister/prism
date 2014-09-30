@@ -114,44 +114,37 @@ Events.on('gameOver', function() {
 			Events.emit('restartGame')
 		})
 
-		Clay.client({
-			method: 'kik.isEnabled'
-		})
-		.then(function (enabled) {
-			if (enabled) {
-				$gameOverBox.appendChild($challengeButton)
-			}
+		$gameOverBox.appendChild($challengeButton)
 
-			$gameOverBox.appendChild($gameOverButton)
+		$gameOverBox.appendChild($gameOverButton)
 
 
-			if (GAME.leaderboard) {
-				var $leaderboardButton = document.createElement('button')
-				$leaderboardButton.innerHTML = 'Leaderboard'
-				$leaderboardButton.className = 'leaderboard-button'
+		if (GAME.leaderboard) {
+			var $leaderboardButton = document.createElement('button')
+			$leaderboardButton.innerHTML = 'Leaderboard'
+			$leaderboardButton.className = 'leaderboard-button'
 
-				// Should add some sort of fastclick here... (touch first)
-				$leaderboardButton.addEventListener('click', function() {
-					if (GAME.leaderboard && !postingScore) {
-						postingScore = true // set to false in showHighScores event
-						if (!postedScore) {
-							$leaderboardButton.innerHTML = 'Posting...'
-							GAME.leaderboard.post({
-								score: GAME.board.score
-							}, function() {
-								$leaderboardButton.innerHTML = 'Leaderboard'
-								postedScore = true
-								Events.emit('showHighScores')
-							})
-						} else {
+			// Should add some sort of fastclick here... (touch first)
+			$leaderboardButton.addEventListener('click', function() {
+				if (GAME.leaderboard && !postingScore) {
+					postingScore = true // set to false in showHighScores event
+					if (!postedScore) {
+						$leaderboardButton.innerHTML = 'Posting...'
+						GAME.leaderboard.post({
+							score: GAME.board.score
+						}, function() {
+							$leaderboardButton.innerHTML = 'Leaderboard'
+							postedScore = true
 							Events.emit('showHighScores')
-						}
+						})
+					} else {
+						Events.emit('showHighScores')
 					}
-				})
-				$gameOverBox.appendChild($leaderboardButton)
-			}
+				}
+			})
+			$gameOverBox.appendChild($leaderboardButton)
+		}
 
-		})
 
 		gameOverOnce = true
 	}
@@ -186,7 +179,15 @@ Events.on('challengeFriend', function() {
 		}
 	})
 	.then(null, function (err) {
-		console.error(err)
+		Clay.Social.smartShare({
+			message: 'I just scored ' + score + ' in Prism! Think you can beat my score?',
+			title: 'Prism',
+			link: 'http://prism.clay.io',
+			//image: screenshotURL,
+			ignoreScreenshot: true,
+			data: {},
+			//respond: // the username of our opponent // cards.kik.returnToConversation
+		})
 	})
 })
 
@@ -415,7 +416,7 @@ window.addEventListener('load', function() {
 
 	// New Clay SDK
 	var Clay = window.Clay
-	Clay.init({clientId: 1, debug: true})
+	Clay.init({gameId: 1, debug: true})
 	.then(function () {
 		return Clay.client({method: 'kik.isEnabled'})
 	})
@@ -453,21 +454,21 @@ window.addEventListener('load', function() {
 			$shareBubble.appendChild($share)
 
 		} else {
-			var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
-			html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
-			document.getElementById('share').innerHTML = html
-
-			var html = ''
-			html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
-			html += "<div>"
-			html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
-			html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
-			html += "</div>"
-			document.getElementById('brand').innerHTML = html
+			throw new Error('always')
 		}
 	})
 	.then(null, function (err) {
-		console.error(err);
+		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
+		html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
+		document.getElementById('share').innerHTML = html
+
+		var html = ''
+		html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
+		html += "<div>"
+		html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
+		html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
+		html += "</div>"
+		document.getElementById('brand').innerHTML = html
 	})
 
 
