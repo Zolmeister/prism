@@ -130,9 +130,17 @@ Events.on('gameOver', function() {
 					postingScore = true // set to false in showHighScores event
 					if (!postedScore) {
 						$leaderboardButton.innerHTML = 'Posting...'
+
+						var postErrorTimeout = setTimeout(function () {
+							$leaderboardButton.innerHTML = 'Leaderboard'
+							postedScore = true
+							Events.emit('showHighScores')
+						}, 1000)
+
 						GAME.leaderboard.post({
 							score: GAME.board.score
 						}, function() {
+							window.clearTimeout(postErrorTimeout)
 							$leaderboardButton.innerHTML = 'Leaderboard'
 							postedScore = true
 							Events.emit('showHighScores')
