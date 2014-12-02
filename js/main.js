@@ -4,22 +4,7 @@ function $(selector, el) {
 }
 
 var GAME = {
-	board: new Board(),
-	share: function() {
-		Clay.client({
-			method: 'kik.send',
-			params: [{
-				text: 'Come play Prism, the most addicting game on Kik!',
-				title: 'Prism',
-				data: {
-					gameKey: 'prism'
-				}
-			}]
-		})
-		.then(null, function (err) {
-			console.error(err)
-		})
-	}
+	board: new Board()
 }
 
 var $grid = $('.grid')[0]
@@ -101,10 +86,6 @@ Events.on('gameOver', function() {
 	if($shareBubble)
 		$shareBubble.style.display = 'none'
 
-	Events.on('showHighScores', function() {
-		GAME.leaderboard.show({}, function() { postingScore = false });
-	})
-
 	if (!gameOverOnce) {
 		var $gameOverButton = document.createElement('button')
 		$gameOverButton.innerHTML = 'Play Again'
@@ -117,42 +98,6 @@ Events.on('gameOver', function() {
 		$gameOverBox.appendChild($challengeButton)
 
 		$gameOverBox.appendChild($gameOverButton)
-
-
-		if (GAME.leaderboard) {
-			var $leaderboardButton = document.createElement('button')
-			$leaderboardButton.innerHTML = 'Leaderboard'
-			$leaderboardButton.className = 'leaderboard-button'
-
-			// Should add some sort of fastclick here... (touch first)
-			$leaderboardButton.addEventListener('click', function() {
-				if (GAME.leaderboard && !postingScore) {
-					postingScore = true // set to false in showHighScores event
-					if (!postedScore) {
-						$leaderboardButton.innerHTML = 'Posting...'
-
-						var postErrorTimeout = setTimeout(function () {
-							$leaderboardButton.innerHTML = 'Leaderboard'
-							postedScore = true
-							Events.emit('showHighScores')
-						}, 1000)
-
-						GAME.leaderboard.post({
-							score: GAME.board.score
-						}, function() {
-							window.clearTimeout(postErrorTimeout)
-							$leaderboardButton.innerHTML = 'Leaderboard'
-							postedScore = true
-							Events.emit('showHighScores')
-						})
-					} else {
-						Events.emit('showHighScores')
-					}
-				}
-			})
-			$gameOverBox.appendChild($leaderboardButton)
-		}
-
 
 		gameOverOnce = true
 	}
@@ -169,33 +114,8 @@ Events.on('gameOver', function() {
 
 Events.on('challengeFriend', function() {
 	var score = GAME.board.score;
-	Clay.client({
-		method: 'kik.isEnabled'
-	})
-	.then(function (enabled) {
-		if (enabled) {
-			return Clay.client({
-				method: 'kik.send',
-				params: [{
-					text: 'I just scored ' + score + ' in Prism! Think you can beat my score?',
-					title: 'Prism',
-					data: {
-						gameKey: 'prism'
-					}
-				}]
-			})
-		}
-	})
-	.then(null, function (err) {
-		Clay.Social.smartShare({
-			message: 'I just scored ' + score + ' in Prism! Think you can beat my score?',
-			title: 'Prism',
-			link: 'http://prism.clay.io',
-			//image: screenshotURL,
-			ignoreScreenshot: true,
-			data: {},
-			//respond: // the username of our opponent // cards.kik.returnToConversation
-		})
+	Clay('client.share.any', {
+		text: 'I just scored ' + score + ' in Prism! Think you can beat my score? http://prism.clay.io'
 	})
 })
 
@@ -296,21 +216,6 @@ if (!localStorage['tutorial-shown']) {
 window.addEventListener('load', function() {
 	scrollTo( 0, 1 );
 
-	// Load clay API
-	var Clay = window.Clay = window.Clay || {};
-	Clay.gameKey = "prism";
-	Clay.readyFunctions = [];
-	Clay.ready = function( fn ) {
-		Clay.readyFunctions.push( fn );
-	};
-	( function() {
-		var clay = document.createElement("script"); clay.async = true;
-		//clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js";
-		clay.src = "http://cdn.clay.io/api.js";
-		//clay.src = "http://clay.io/api/src/bundle.js";
-		var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
-	} )();
-
 	// Ghetto load an ad
 	// Just took the coffeescript -> js from mobile.coffee... not super clean
 	var adLoaded = function(response) {
@@ -400,52 +305,26 @@ window.addEventListener('load', function() {
 	  }
 	}
 
-	// Load GA
-	;(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	// Detect old android and toss a class on <body> to use less animations
+	var androidUserAgent = navigator.userAgent.match(/Android\s([0-9\.]*)/)
+	if(androidUserAgent && parseInt(androidUserAgent[1], 10) < 3)
+		document.body.className = 'slow'
 
-	ga('create', 'UA-27992080-1', 'clay.io');
-	ga('send', 'pageview');
-
-	// high score
-	Clay.ready(function() {
-		console.log('Clay loaded')
-
-		// Detect old android and toss a class on <body> to use less animations
-		if(Clay.Environment.os == 'android' && Clay.Environment.version < 3) {
-			document.body.className = 'slow'
-		}
-
-		if(navigator.onLine)
-			GAME.leaderboard = new Clay.Leaderboard({id: 3487})
-	})
-
-	// New Clay SDK
-	var Clay = window.Clay
-	Clay.init({gameId: 4875, debug: true})
-	.then(function () {
-		return Clay.client({method: 'kik.isEnabled'})
-	})
-	.then(function (isEnabled) {
+	Clay('client.kik.isEnabled', function(err, isEnabled) {
 		if (isEnabled) {
-			Clay.client({
-				method: 'kik.browser.setOrientationLock',
-				params: ['portrait']
-			})
-			.then(null, function (err) {
-				console.error(err)
+			Clay('client.kik.browser.setOrientationLock', ['portrait'], function(err) {
+				if(err)
+					console.error(err)
 			})
 
 			// track messages sent
-			Clay.client({method: 'kik.metrics.enableGoogleAnalytics'})
-			.then(null, function (err) {
-				console.error(err)
+			Clay('client.kik.metrics.enableGoogleAnalytics', function(err) {
+				if(err)
+					console.error(err)
 			})
 
 			// ghetto-load ad
-			ajax( 'http://api.clay.io/ad/' + Clay.gameKey, adLoaded )
+			ajax('http://api.clay.io/ad/prism', adLoaded)
 
 			var $brand = $('.brand')[0]
 			$brand.style.display = 'none'
@@ -457,26 +336,26 @@ window.addEventListener('load', function() {
 			$share.href = '#'
 			$share.id = 'kik-share'
 			$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
-			//$shareBubble.addEventListener('touchstart', GAME.share)
-			$shareBubble.addEventListener('click', GAME.share)
+			$shareBubble.addEventListener('click', function() {
+				Clay('client.share.any', {
+					text: 'Come play Prism, the most addicting game around! http://prism.clay.io'
+				})
+			})
 			$shareBubble.appendChild($share)
 
 		} else {
-			throw new Error('always')
-		}
-	})
-	.then(null, function (err) {
-		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
-		html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
-		document.getElementById('share').innerHTML = html
+			var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
+			html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
+			document.getElementById('share').innerHTML = html
 
-		var html = ''
-		html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
-		html += "<div>"
-		html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
-		html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
-		html += "</div>"
-		document.getElementById('brand').innerHTML = html
+			var html = ''
+			html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
+			html += "<div>"
+			html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
+			html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
+			html += "</div>"
+			document.getElementById('brand').innerHTML = html
+		}
 	})
 
 

@@ -2,3 +2,4 @@ node_modules/
 dist/
 build/
 deployment-config.json
+npm-debug.log
