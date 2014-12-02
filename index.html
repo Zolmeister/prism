@@ -91,7 +91,23 @@
 			<div id='progress-cover' class='progress-0'></div>
 		</div>
 		<div class='brand' id='brand'><!-- we fill this out onload --></div>
-		<script src='//cdn.wtf/sdk/clay_sdk.js'></script>
+		<script>
+			;(function(C,l,a,y,_,i,o){C[_]=C[_]||function(){
+			(C[_].q=C[_].q||[]).push(arguments)},C[_].l=1*new Date();i=l.createElement(a),
+			o=l.getElementsByTagName(a)[0];i.async=1;i.src=y;o.parentNode.insertBefore(i,o)
+			})(window,document,'script','//cdn.wtf/sdk/v1/clay_sdk.js?1417499712','Clay');
+
+			Clay('init', {gameId: '4875'});
+
+			// Load GA
+			;(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-27992080-1', 'clay.io');
+			ga('send', 'pageview');
+		</script>
 		<script src='dist/lib.min.js'></script>
 		<script src='dist/prism.min.js'></script>
 	</body>
