@@ -216,95 +216,6 @@ if (!localStorage['tutorial-shown']) {
 window.addEventListener('load', function() {
 	scrollTo( 0, 1 );
 
-	// Ghetto load an ad
-	// Just took the coffeescript -> js from mobile.coffee... not super clean
-	var adLoaded = function(response) {
-		var ad, devicePixelRatio, e, image, obj;
-
-		try {
-		  obj = JSON.parse(response);
-		} catch (_error) {
-		  e = _error
-		  obj = {}
-		  return
-		}
-
-		ad = document.createElement('a')
-		ad.className = 'ad'
-		devicePixelRatio = window.devicePixelRatio || 1
-		image = document.createElement('img')
-		ad.href = '#'
-
-		if (devicePixelRatio > 1) {
-		  image.src = obj.srcRetina
-		} else {
-		  image.src = obj.src
-		}
-
-		if (typeof _gaq !== 'undefined') {
-		  _gaq.push(['_trackEvent', 'Cross Promotion 320x50', obj.href, 'Ad View']);
-		}
-
-		ad.addEventListener('touchstart', function(e) {
-		  if (e) {
-		    e.preventDefault()
-		  }
-		  if (typeof _gaq !== 'undefined') {
-		    _gaq.push(['_trackEvent', 'Cross Promotion 320x50', obj.href, 'Ad Click'])
-		    return _gaq.push(function() {
-		      return window.location.href = obj.href
-		    })
-		  } else {
-		    return window.location.href = obj.href
-		  }
-		})
-
-		image.width = 320 * devicePixelRatio
-		image.height = 50 * devicePixelRatio
-		image.style.width = '320px'
-		image.style.height = '50px'
-
-		ad.appendChild(image)
-		document.body.appendChild(ad)
-	}
-
-	var objToParams = function(obj) {
-	  var p, url;
-	  url = []
-	  for (p in obj) {
-	    if (obj.hasOwnProperty(p)) {
-	      url.push(p + "=" + encodeURIComponent(obj[p]))
-	    }
-	  }
-	  return url.join("&")
-	}
-	var ajax = function(url, options, callback) {
-	  var request, update, xhr;
-	  if (options == null) {
-	    options = {}
-	  }
-	  if (callback == null) {
-	    callback = false
-	  }
-	  if (typeof options === 'function') {
-	    callback = options
-	    options = {}
-	  }
-	  if ('withCredentials' in new XMLHttpRequest()) {
-	    request = XMLHttpRequest
-	    update = function() {
-	      if (xhr.readyState === 4) {
-	        return callback(xhr.responseText)
-	      }
-	    }
-	    xhr = new request()
-	    xhr.open("POST", url, true)
-	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-	    xhr.onreadystatechange = update
-	    return xhr.send(objToParams(options))
-	  }
-	}
-
 	// Detect old android and toss a class on <body> to use less animations
 	var androidUserAgent = navigator.userAgent.match(/Android\s([0-9\.]*)/)
 	if(androidUserAgent && parseInt(androidUserAgent[1], 10) < 3)
@@ -321,10 +232,7 @@ window.addEventListener('load', function() {
 			Clay('client.kik.metrics.enableGoogleAnalytics', function(err) {
 				if(err)
 					console.error(err)
-			})
-
-			// ghetto-load ad
-			ajax('http://api.clay.io/ad/prism', adLoaded)
+			}
 
 			var $brand = $('.brand')[0]
 			$brand.style.display = 'none'
