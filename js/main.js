@@ -213,6 +213,55 @@ if (!localStorage['tutorial-shown']) {
 	GAME.board.newGame()
 }
 
+Clay('ui.ads.banner', {position: 'bottom'}, function (err, ad) {
+	document.body.appendChild(ad.$el)
+})
+
+Clay('client.kik.isEnabled', function(err, isEnabled) {
+	if (isEnabled) {
+		Clay('client.kik.browser.setOrientationLock', ['portrait'], function(err) {
+			if(err)
+				console.error(err)
+		})
+
+		// track messages sent
+		Clay('client.kik.metrics.enableGoogleAnalytics', function(err) {
+			if(err)
+				console.error(err)
+		})
+
+		var $brand = $('.brand')[0]
+		$brand.style.display = 'none'
+
+		var $shareBubble = document.getElementById('share')
+
+		var $share = document.createElement('a')
+		$share.className = 'kik-share'
+		$share.href = '#'
+		$share.id = 'kik-share'
+		$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
+		$shareBubble.addEventListener('click', function() {
+			Clay('client.share.any', {
+				text: 'Come play Prism, the most addicting game around! http://prism.clay.io'
+			})
+		})
+		$shareBubble.appendChild($share)
+
+	} else {
+		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
+		html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
+		document.getElementById('share').innerHTML = html
+
+		var html = ''
+		html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
+		html += "<div>"
+		html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
+		html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
+		html += "</div>"
+		document.getElementById('brand').innerHTML = html
+	}
+})
+
 window.addEventListener('load', function() {
 	scrollTo( 0, 1 );
 
@@ -220,52 +269,6 @@ window.addEventListener('load', function() {
 	var androidUserAgent = navigator.userAgent.match(/Android\s([0-9\.]*)/)
 	if(androidUserAgent && parseInt(androidUserAgent[1], 10) < 3)
 		document.body.className = 'slow'
-
-	Clay('client.kik.isEnabled', function(err, isEnabled) {
-		if (isEnabled) {
-			Clay('client.kik.browser.setOrientationLock', ['portrait'], function(err) {
-				if(err)
-					console.error(err)
-			})
-
-			// track messages sent
-			Clay('client.kik.metrics.enableGoogleAnalytics', function(err) {
-				if(err)
-					console.error(err)
-			}
-
-			var $brand = $('.brand')[0]
-			$brand.style.display = 'none'
-
-			var $shareBubble = document.getElementById('share')
-
-			var $share = document.createElement('a')
-			$share.className = 'kik-share'
-			$share.href = '#'
-			$share.id = 'kik-share'
-			$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
-			$shareBubble.addEventListener('click', function() {
-				Clay('client.share.any', {
-					text: 'Come play Prism, the most addicting game around! http://prism.clay.io'
-				})
-			})
-			$shareBubble.appendChild($share)
-
-		} else {
-			var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
-			html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
-			document.getElementById('share').innerHTML = html
-
-			var html = ''
-			html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
-			html += "<div>"
-			html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
-			html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
-			html += "</div>"
-			document.getElementById('brand').innerHTML = html
-		}
-	})
-
 
 	// webkit-clip: text doesn't work on older android, so the logo, etc.. looks screwy
 	var $gameOverText = document.getElementById('game-over-text')
