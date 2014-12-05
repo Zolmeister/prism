@@ -58,6 +58,13 @@ var gameOverOnce = false
 var postedScore = false
 var postingScore = false
 Events.on('gameOver', function() {
+	Clay('ui.ads.page', function (err, ad) {
+	  document.body.appendChild(ad.$el)
+		ad.on('remove', function() { Events.emit('gameOverAdRemoved') })
+	})
+})
+
+Events.on('gameOverAdRemoved', function() {
 	postedScore = false
 	postingScore = false
 	maxColor = 0
