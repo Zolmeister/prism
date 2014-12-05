@@ -230,9 +230,6 @@ Clay('client.kik.isEnabled', function(err, isEnabled) {
 				console.error(err)
 		})
 
-		var $brand = $('.brand')[0]
-		$brand.style.display = 'none'
-
 		var $shareBubble = document.getElementById('share')
 
 		var $share = document.createElement('a')
@@ -251,14 +248,6 @@ Clay('client.kik.isEnabled', function(err, isEnabled) {
 		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
 		html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
 		document.getElementById('share').innerHTML = html
-
-		var html = ''
-		html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
-		html += "<div>"
-		html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
-		html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
-		html += "</div>"
-		document.getElementById('brand').innerHTML = html
 	}
 })
 

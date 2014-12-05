@@ -480,29 +480,6 @@ button:active:after {
   margin-left: -14px;
 }
 
-.brand {
-	position: absolute;
-	bottom: 10px;
-	width: 100%;
-	text-align: center;
-	z-index: 4;
-}
-.brand a {
-	opacity: 0.3;
-	transition: opacity 0.5s;
-	color: #000;
-}
-.brand a:hover {
-	opacity: 1;
-	transition: opacity 0.5s;
-}
-.brand img {
-	border: none;
-}
-.brand div {
-	font-size: 0.8em;
-}
-
 /* Ghetto, but the animations are only run once otherwise... (not for each new color combo). See http://css-tricks.com/restart-css-animation/ */
 @-webkit-keyframes mergeAnimation1
 {
