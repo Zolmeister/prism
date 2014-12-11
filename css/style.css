@@ -67,18 +67,6 @@ a {
 	vertical-align: bottom;
 }
 
-.ad {
-	position: fixed;
-	bottom: 0;
-	left: 50%;
-	margin-left: -160px;
-	display: block;
-}
-
-.ad img {
-	display: block;
-}
-
 #progress-bar {
 	background: -webkit-gradient(linear, left top, right top, color-stop(0.125, #78c5d5), color-stop(0.125, #78c5d5), color-stop(0.125, #459ba8), color-stop(0.25, #459ba8), color-stop(0.25, #79c268), color-stop(0.375, #79c268), color-stop(0.375, #c5d747), color-stop(0.5, #c5d747), color-stop(0.5, #f5d63d), color-stop(0.625, #f5d63d), color-stop(0.625, #f18c32), color-stop(0.75, #f18c32), color-stop(0.75, #e868a1), color-stop(0.875, #e868a1), color-stop(1, #bf63a6));
 	background: -webkit-linear-gradient(left, #78c5d5 12.5%, #78c5d5 12.5%, #459ba8 12.5%, #459ba8 25%, #79c268 25%, #79c268 37.5%, #c5d747 37.5%, #c5d747 50%, #f5d63d 50%, #f5d63d 62.5%, #f18c32 62.5%, #f18c32 75%, #e868a1 75%, #e868a1 87.5%, #bf63a6 87.5%);
@@ -490,29 +478,6 @@ button:active:after {
   bottom: -11px;
   left: 50%;
   margin-left: -14px;
-}
-
-.brand {
-	position: absolute;
-	bottom: 10px;
-	width: 100%;
-	text-align: center;
-	z-index: 4;
-}
-.brand a {
-	opacity: 0.3;
-	transition: opacity 0.5s;
-	color: #000;
-}
-.brand a:hover {
-	opacity: 1;
-	transition: opacity 0.5s;
-}
-.brand img {
-	border: none;
-}
-.brand div {
-	font-size: 0.8em;
 }
 
 /* Ghetto, but the animations are only run once otherwise... (not for each new color combo). See http://css-tricks.com/restart-css-animation/ */

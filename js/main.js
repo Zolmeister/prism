@@ -58,6 +58,13 @@ var gameOverOnce = false
 var postedScore = false
 var postingScore = false
 Events.on('gameOver', function() {
+	Clay('ui.ads.page', function (err, ad) {
+	  document.body.appendChild(ad.$el)
+		ad.on('remove', function() { Events.emit('gameOverAdRemoved') })
+	})
+})
+
+Events.on('gameOverAdRemoved', function() {
 	postedScore = false
 	postingScore = false
 	maxColor = 0
@@ -213,151 +220,51 @@ if (!localStorage['tutorial-shown']) {
 	GAME.board.newGame()
 }
 
-window.addEventListener('load', function() {
-	scrollTo( 0, 1 );
+Clay('ui.ads.banner', {position: 'bottom'}, function (err, ad) {
+	document.body.appendChild(ad.$el)
+})
 
-	// Ghetto load an ad
-	// Just took the coffeescript -> js from mobile.coffee... not super clean
-	var adLoaded = function(response) {
-		var ad, devicePixelRatio, e, image, obj;
-
-		try {
-		  obj = JSON.parse(response);
-		} catch (_error) {
-		  e = _error
-		  obj = {}
-		  return
-		}
-
-		ad = document.createElement('a')
-		ad.className = 'ad'
-		devicePixelRatio = window.devicePixelRatio || 1
-		image = document.createElement('img')
-		ad.href = '#'
-
-		if (devicePixelRatio > 1) {
-		  image.src = obj.srcRetina
-		} else {
-		  image.src = obj.src
-		}
-
-		if (typeof _gaq !== 'undefined') {
-		  _gaq.push(['_trackEvent', 'Cross Promotion 320x50', obj.href, 'Ad View']);
-		}
-
-		ad.addEventListener('touchstart', function(e) {
-		  if (e) {
-		    e.preventDefault()
-		  }
-		  if (typeof _gaq !== 'undefined') {
-		    _gaq.push(['_trackEvent', 'Cross Promotion 320x50', obj.href, 'Ad Click'])
-		    return _gaq.push(function() {
-		      return window.location.href = obj.href
-		    })
-		  } else {
-		    return window.location.href = obj.href
-		  }
+Clay('client.kik.isEnabled', function(err, isEnabled) {
+	if (isEnabled) {
+		Clay('client.kik.browser.setOrientationLock', ['portrait'], function(err) {
+			if(err)
+				console.error(err)
 		})
 
-		image.width = 320 * devicePixelRatio
-		image.height = 50 * devicePixelRatio
-		image.style.width = '320px'
-		image.style.height = '50px'
+		// track messages sent
+		Clay('client.kik.metrics.enableGoogleAnalytics', function(err) {
+			if(err)
+				console.error(err)
+		})
 
-		ad.appendChild(image)
-		document.body.appendChild(ad)
-	}
+		var $shareBubble = document.getElementById('share')
 
-	var objToParams = function(obj) {
-	  var p, url;
-	  url = []
-	  for (p in obj) {
-	    if (obj.hasOwnProperty(p)) {
-	      url.push(p + "=" + encodeURIComponent(obj[p]))
-	    }
-	  }
-	  return url.join("&")
+		var $share = document.createElement('a')
+		$share.className = 'kik-share'
+		$share.href = '#'
+		$share.id = 'kik-share'
+		$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
+		$shareBubble.addEventListener('click', function() {
+			Clay('client.share.any', {
+				text: 'Come play Prism, the most addicting game around! http://prism.clay.io'
+			})
+		})
+		$shareBubble.appendChild($share)
+
+	} else {
+		var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
+		html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
+		document.getElementById('share').innerHTML = html
 	}
-	var ajax = function(url, options, callback) {
-	  var request, update, xhr;
-	  if (options == null) {
-	    options = {}
-	  }
-	  if (callback == null) {
-	    callback = false
-	  }
-	  if (typeof options === 'function') {
-	    callback = options
-	    options = {}
-	  }
-	  if ('withCredentials' in new XMLHttpRequest()) {
-	    request = XMLHttpRequest
-	    update = function() {
-	      if (xhr.readyState === 4) {
-	        return callback(xhr.responseText)
-	      }
-	    }
-	    xhr = new request()
-	    xhr.open("POST", url, true)
-	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-	    xhr.onreadystatechange = update
-	    return xhr.send(objToParams(options))
-	  }
-	}
+})
+
+window.addEventListener('load', function() {
+	scrollTo( 0, 1 );
 
 	// Detect old android and toss a class on <body> to use less animations
 	var androidUserAgent = navigator.userAgent.match(/Android\s([0-9\.]*)/)
 	if(androidUserAgent && parseInt(androidUserAgent[1], 10) < 3)
 		document.body.className = 'slow'
-
-	Clay('client.kik.isEnabled', function(err, isEnabled) {
-		if (isEnabled) {
-			Clay('client.kik.browser.setOrientationLock', ['portrait'], function(err) {
-				if(err)
-					console.error(err)
-			})
-
-			// track messages sent
-			Clay('client.kik.metrics.enableGoogleAnalytics', function(err) {
-				if(err)
-					console.error(err)
-			})
-
-			// ghetto-load ad
-			ajax('http://api.clay.io/ad/prism', adLoaded)
-
-			var $brand = $('.brand')[0]
-			$brand.style.display = 'none'
-
-			var $shareBubble = document.getElementById('share')
-
-			var $share = document.createElement('a')
-			$share.className = 'kik-share'
-			$share.href = '#'
-			$share.id = 'kik-share'
-			$share.innerHTML = "<img src='images/kik-it.png'><span>share!</span></a>"
-			$shareBubble.addEventListener('click', function() {
-				Clay('client.share.any', {
-					text: 'Come play Prism, the most addicting game around! http://prism.clay.io'
-				})
-			})
-			$shareBubble.appendChild($share)
-
-		} else {
-			var html = '<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fprism.clay.io&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=405599259465424" style="border:none; overflow:hidden; width: 90px; height:21px;"></iframe>'
-			html += '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://prism.clay.io&via=claydotio&text=Prism%20-%202048%20without%20numbers" style="width:85px; height:20px;"></iframe>'
-			document.getElementById('share').innerHTML = html
-
-			var html = ''
-			html += "<a href='http://clay.io' target='_blank'><img src='http://clay.io/images/full-logo-dark-150.png'></a>"
-			html += "<div>"
-			html += "	<a href='http://clay.io/development-tools' target='_blank'>We &hearts; HTML5 Games</a>"
-			html += "	&middot; <a href='mailto:contact@clay.io'>contact@clay.io</a>"
-			html += "</div>"
-			document.getElementById('brand').innerHTML = html
-		}
-	})
-
 
 	// webkit-clip: text doesn't work on older android, so the logo, etc.. looks screwy
 	var $gameOverText = document.getElementById('game-over-text')
